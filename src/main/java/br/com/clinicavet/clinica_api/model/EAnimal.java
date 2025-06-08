@@ -1,10 +1,12 @@
 package br.com.clinicavet.clinica_api.model;
 
 import br.com.clinicavet.clinica_api.model.enums.PorteAnimal;
-import br.com.clinicavet.clinica_api.model.enums.TipoAnimal;
+import br.com.clinicavet.clinica_api.model.enums.EspecieAnimal;
+import br.com.clinicavet.clinica_api.model.enums.SexoAnimal;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 
 
 @Entity
@@ -24,22 +26,40 @@ public class EAnimal {
     @Column(length = 50, nullable = false)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(name = "especie", nullable = false)
+    private EspecieAnimal especie;
+
+    @Column(length = 50, nullable = false)
+    private PorteAnimal porte;
+
+    @Column(length = 50, nullable = false)
     private String raca;
 
+    @Column(nullable = false)
+    private SexoAnimal sexo;
+
+    @Column(length = 15)
     private String cor;
 
     @Column(nullable = false)
     private double peso;
 
-    @Column(name = "data_nascimento",  nullable = false)
-    private java.time.LocalDate dataNascimento;
-
     @Column(nullable = false)
-    private PorteAnimal porte;
+    private boolean castrado;
 
-    @Column(name = "tipo_animal", nullable = false)
-    private TipoAnimal tipoAnimal;
+    @Column(name = "data_nascimento",  nullable = false)
+    private LocalDate dataNascimento;
+
+    @Column(length = 100)
+    private String observacao;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private ECliente cliente;
+
+
+
+
 
 
 }
