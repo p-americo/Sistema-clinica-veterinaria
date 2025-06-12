@@ -1,6 +1,7 @@
-package br.ifg.meaupet.repository;
+package br.com.clinicavet.clinica_api.repository;
 
-import br.ifg.meaupet.model.EAgendamento;
+
+import br.com.clinicavet.clinica_api.model.EAgendamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AgendamentoRepository extends JpaRepository <EAgendamento, Long>{

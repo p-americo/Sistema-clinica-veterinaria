@@ -1,4 +1,25 @@
 package br.com.clinicavet.clinica_api.model;
 
-public class EFuncionario {
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "funcionarios")
+@Getter
+@Setter
+public class EFuncionario extends EPessoa {
+
+
+    @Column(name = "data_admissao", nullable = false)
+    private LocalDate dataAdmissao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cargo_id", nullable = false)
+    private ECargo cargo;
+
+    @Column(name = "crmv", unique = true)
+    private String crmv;
+
 }

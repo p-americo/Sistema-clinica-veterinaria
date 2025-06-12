@@ -17,7 +17,7 @@ public class EPessoa {
     @Column(length = 100, nullable = false)
     private String nome;
 
-    @Column(length = 11, unique = true, nullable = false)
+    @Column(length = 15, unique = true, nullable = false)
     private String cpf;
 
     @Column(nullable = false)

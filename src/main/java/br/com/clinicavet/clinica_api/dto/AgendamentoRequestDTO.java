@@ -2,6 +2,7 @@ package br.com.clinicavet.clinica_api.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,15 +12,17 @@ import java.time.LocalDateTime;
 @Setter
 public class AgendamentoRequestDTO {
 
-    @NotNull(message = "A data do agendamento é obrigatória")
-    @Future(message = "A data do agendamento deve estar no futuro")
-    private LocalDateTime dataAgendamento;
+        @NotNull
+        private Long animalId;
+        @NotNull
+        private Long servicoId;
+        @NotNull
+        private Long clienteId;
 
-    @NotNull(message = "O ID do animal é obrigatório")
-    private Long animalId;
+        @NotNull @Future
+        private LocalDateTime dataHoraAgendamento;
 
-    @NotNull(message = "O ID da pessoa é obrigatório")
-    private Long pessoaId;
+        @Size(max = 255)
+        private String observacoes;
 
-    private String status = "AGENDADO";
 }

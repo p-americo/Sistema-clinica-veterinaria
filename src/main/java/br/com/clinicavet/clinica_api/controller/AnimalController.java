@@ -49,7 +49,7 @@ public class AnimalController {
 
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<AnimalResponseDTO> atualizarAnimal(@PathVariable long id, @RequestBody @Valid AnimalUpdateDTO animalDTO) {
 
         AnimalResponseDTO responseDTO = animalService.atualizarAnimal(id, animalDTO);

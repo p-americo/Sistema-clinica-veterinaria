@@ -4,6 +4,8 @@ import br.com.clinicavet.clinica_api.model.enums.TipoServico;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "servicos")
 @Getter
@@ -23,8 +25,8 @@ public class EServico {
 
     @ManyToOne
     @JoinColumn(name = "veterinario_id", nullable = false)
-    //private EVeterinario veterinario;
+    private EFuncionario veterinario;
 
-    @Column(nullable = false)
-    private double valor;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal valor;
 }

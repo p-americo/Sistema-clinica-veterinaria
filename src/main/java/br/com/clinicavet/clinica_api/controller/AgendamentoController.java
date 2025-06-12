@@ -1,52 +1,59 @@
-package br.ifg.meaupet.controller;
+package br.com.clinicavet.clinica_api.controller;
 
-import br.ifg.meaupet.dto.AgendamentoDTO;
-import br.ifg.meaupet.services.AgendamentoService;
+import br.com.clinicavet.clinica_api.dto.AgendamentoRequestDTO;
+import br.com.clinicavet.clinica_api.dto.AgendamentoResponseDTO;
+import br.com.clinicavet.clinica_api.service.AgendamentoService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/agendamento")
+@RequestMapping("/api/agendamentos")
 public class AgendamentoController {
+
+    private final AgendamentoService agendamentoService;
+
     @Autowired
-    private AgendamentoService service;
-
-    @GetMapping
-    public Page<AgendamentoDTO> listarAgendamento(@PageableDefault(size = 10) Pageable paginacao) {
-        return service.obterAnimal(paginacao);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<AgendamentoDTO> detalharAgendamento(@PathVariable @NotNull Long id) {
-        AgendamentoDTO dto = service.obterAnimalPorId(id);
-        return ResponseEntity.ok(dto);
+    public AgendamentoController(AgendamentoService agendamentoService) {
+        this.agendamentoService = agendamentoService;
     }
 
     @PostMapping
-    public ResponseEntity<AgendamentoDTO> cadastrarAgendamento(@RequestBody @Valid AgendamentoDTO dto, UriComponentsBuilder uriBuilder) {
-        AgendamentoDTO agendamento = service.cadastrarAnimal(dto);
-        URI uri = uriBuilder.path("/pessoas/{id}").buildAndExpand(agendamento.getId()).toUri();
-        return ResponseEntity.created(uri).body(agendamento);
+    public ResponseEntity<AgendamentoResponseDTO> criarAgendamento(@RequestBody @Valid AgendamentoRequestDTO requestDTO, UriComponentsBuilder uriBuilder) {
+        AgendamentoResponseDTO responseDTO = agendamentoService.criarAgendamento(requestDTO);
+        URI uri = uriBuilder.path("/api/agendamentos/{id}").buildAndExpand(responseDTO.getId()).toUri();
+        return ResponseEntity.created(uri).body(responseDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AgendamentoDTO> atualizarAnimal(@PathVariable @NotNull Long id, @RequestBody AgendamentoDTO dto, UriComponentsBuilder uriBuilder) {
-        AgendamentoDTO pessoa = service.atualizarAnimal(id, dto);
-        return ResponseEntity.ok(pessoa);
+    @GetMapping
+    public ResponseEntity<List<AgendamentoResponseDTO>> listarAgendamentos() {
+        return ResponseEntity.ok(agendamentoService.listarTodos());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAnimal(@PathVariable @NotNull Long id) {
-        service.deletarAnimal(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<AgendamentoResponseDTO> buscarAgendamentoPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.buscarPorId(id));
+    }
+
+    // --- Endpoints para AÇÕES (alteração de status) ---
+
+    // PATCH é semanticamente bom para atualizações parciais ou de estado
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<AgendamentoResponseDTO> cancelarAgendamento(@PathVariable Long id) {
+        AgendamentoResponseDTO responseDTO = agendamentoService.cancelarAgendamento(id);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PatchMapping("/{id}/confirmar") // Mapeia para requisições PATCH
+    public ResponseEntity<AgendamentoResponseDTO> confirmarAgendamento(@PathVariable Long id) {
+
+        AgendamentoResponseDTO responseDTO = agendamentoService.confirmarAgendamento(id);
+
+        return ResponseEntity.ok(responseDTO);
     }
 }

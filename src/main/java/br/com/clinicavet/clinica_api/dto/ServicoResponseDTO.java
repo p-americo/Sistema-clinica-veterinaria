@@ -4,12 +4,17 @@ import br.com.clinicavet.clinica_api.model.enums.TipoServico;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 @Getter
 @Setter
+
 public class ServicoResponseDTO {
 
     private Long id;
+
     private TipoServico tipo;
-    private double valor;
+
+    private BigDecimal valor;
+
     private String nomeVeterinario;
 }

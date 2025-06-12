@@ -26,15 +26,18 @@ public class EAnimal {
     @Column(length = 50, nullable = false)
     private String nome;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "especie", nullable = false)
     private EspecieAnimal especie;
 
-    @Column(length = 50, nullable = false)
+   @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PorteAnimal porte;
 
     @Column(length = 50, nullable = false)
     private String raca;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SexoAnimal sexo;
 
@@ -50,16 +53,11 @@ public class EAnimal {
     @Column(name = "data_nascimento",  nullable = false)
     private LocalDate dataNascimento;
 
-    @Column(length = 100)
+    @Column(length = 255)
     private String observacao;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private ECliente cliente;
-
-
-
-
-
 
 }
