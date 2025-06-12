@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class ECliente extends EPessoa {
+public abstract class ECliente extends EPessoa {
 
     @CreatedDate
     @Column(name = "data_cadastro", nullable = false, updatable = false)

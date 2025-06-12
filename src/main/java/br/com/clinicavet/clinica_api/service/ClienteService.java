@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 @Service
 public class ClienteService {
 
@@ -41,6 +45,44 @@ public class ClienteService {
         ECliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID: " + id));
         return modelMapper.map(cliente, ClienteResponseDTO.class);
+    }
+
+    @Transactional
+    public ClienteResponseDTO buscarClientePorId(Long cliente_id, ClienteRequestDTO clienteRequestDTO) {
+
+        ECliente clienteBuscado = clienteRepository.findById(cliente_id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id));
+
+        return modelMapper.map(clienteBuscado, ClienteResponseDTO.class);
+    }
+
+    @Transactional
+    public List<ClienteRequestDTO> buscaTodosClientes(ClienteRequestDTO clienteRequestDTO) {
+
+        List<ECliente> clientes = clienteRepository.findAll();
+
+        return clientes.stream().map(cliente -> modelMapper.map(cliente, ClienteRequestDTO.class)).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ClienteResponseDTO atualizarCliente(Long cliente_id, ClienteRequestDTO clienteRequestDTO) {
+
+        ECliente clienteExistente = clienteRepository.findById(cliente_id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id));
+
+        modelMapper.map(clienteRequestDTO, ClienteResponseDTO.class);
+
+        ECliente clienteAtualizado = clienteRepository.save(clienteExistente);
+
+        return modelMapper.map(clienteAtualizado, ClienteResponseDTO.class);
+    }
+
+    @Transactional
+    public ClienteResponseDTO removerCliente(Long cliente_id) {
+
+        ECliente clienteRemovido = clienteRepository.findById(cliente_id).orElseThrow(( -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id);
+
+        clienteRepository.delete(clienteRemovido);
+
+        return modelMapper.map(clienteRemovido, ClienteResponseDTO.class);
     }
 
 
