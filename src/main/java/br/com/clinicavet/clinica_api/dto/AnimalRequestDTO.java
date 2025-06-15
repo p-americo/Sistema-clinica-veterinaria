@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -42,8 +43,8 @@ public class AnimalRequestDTO {
     private String cor;
 
     @NotNull(message = "O peso do animal é obrigatório.")
-    @PositiveOrZero(message = "O peso do animal deve ser zero ou maior.")
-    private Double peso;
+    @PositiveOrZero(message = "O peso do animal não pode ser negativo.")
+    private BigDecimal peso;
 
     @NotNull(message = "Informar se o animal é castrado é obrigatório.")
     private Boolean castrado;
@@ -55,9 +56,8 @@ public class AnimalRequestDTO {
     @Size(max = 100, message = "A observação deve ter no máximo 100 caracteres.") // Ajuste conforme necessidade
     private String observacao;
 
-    //@NotNull(message = "O ID do cliente é obrigatório.")
-   // @Positive(message = "O valor do ID deve ser positivo.")
-   //private long client_id;
+    @NotNull(message = "O ID do cliente é obrigatório.")
+    private Long clienteId;
 
 
 }

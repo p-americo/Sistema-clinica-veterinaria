@@ -59,7 +59,7 @@ public class AnimalController {
     @DeleteMapping
     public ResponseEntity<AnimalResponseDTO> deletarAnimal(@PathVariable long id){
 
-        AnimalResponseDTO animalResponseDTO = animalService.deleteAnimal(id);
-        return  ResponseEntity.ok().body(animalResponseDTO);
+        animalService.deletarAnimal(id);
+        return  ResponseEntity.noContent().build();
     }
 }
