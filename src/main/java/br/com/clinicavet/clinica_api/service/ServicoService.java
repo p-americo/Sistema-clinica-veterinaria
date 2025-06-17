@@ -47,11 +47,10 @@ public class ServicoService {
 
     @Transactional
     public ServicoResponseDTO cadastrarServico(ServicoRequestDTO dto) {
-        // Busca a entidade do funcionário (que deve ser um veterinário)
+
         EFuncionario veterinario = funcionarioRepository.findById(dto.getVeterinarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Veterinário não encontrado com o ID: " + dto.getVeterinarioId()));
 
-        // VALIDAÇÃO DE NEGÓCIO: Garante que o funcionário associado tem o cargo de VETERINARIO
         if (veterinario.getCargo() == null || veterinario.getCargo().getCargo() != TipoCargo.VETERINARIO) {
             throw new IllegalArgumentException("O funcionário com ID " + veterinario.getId() + " não é um veterinário.");
         }

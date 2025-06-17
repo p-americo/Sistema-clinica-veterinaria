@@ -56,10 +56,10 @@ public class AnimalController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-    @DeleteMapping
-    public ResponseEntity<AnimalResponseDTO> deletarAnimal(@PathVariable long id){
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAnimal(@PathVariable long id) {
         animalService.deletarAnimal(id);
-        return  ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }

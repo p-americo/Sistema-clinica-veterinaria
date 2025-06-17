@@ -5,8 +5,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,20 +16,20 @@ import java.util.List;
 public class ClienteRequestDTO {
 
 
-    @NotBlank(message = "O nome não pode ser nulo")
+    @Size(max = 100)
     private String nome;
 
-    @NotBlank(message = "O cpf não pode ser nulo")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter exatamente 11 dígitos.")
     private String cpf;
 
-    @NotNull(message = "A Data de Nascimento não pode ser nula")
-
+    @Past(message = "A data de nascimento deve ser uma data no passado.")
     private LocalDate dataNascimento;
 
-    @NotBlank(message = "O telefone não pode ser nulo")
+    @Size(max = 20)
     private String telefone;
 
-    @NotBlank(message = "O email não pode ser nulo")
+    @Email(message = "O formato do e-mail é inválido.")
+    @Size(max = 100)
     private String email;
 
 

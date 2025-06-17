@@ -15,10 +15,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/servicos") // << Boa prática: plural e com prefixo /api
+@RequestMapping("/api/servicos")
 public class ServicoController {
 
-    private final ServicoService service; // << Usando injeção via construtor
+    private final ServicoService service;
 
     @Autowired
     public ServicoController(ServicoService service) {

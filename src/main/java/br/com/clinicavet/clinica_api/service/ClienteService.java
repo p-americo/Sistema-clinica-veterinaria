@@ -59,7 +59,8 @@ public class ClienteService {
     }
 
     @Transactional
-    public void deletarCliente(Long id) { // Este método está correto e é o preferencial
+    public void deletarCliente(Long id) {
+
         if (!clienteRepository.existsById(id)) {
             throw new NoSuchElementException("Cliente não encontrado para deleção com o ID: " + id);
         }

@@ -3,8 +3,8 @@ package br.com.clinicavet.clinica_api.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
 @Entity
 @Table(name = "pessoas")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,6 +28,7 @@ public class EPessoa {
     @Column(length = 20, nullable = false)
     private String telefone;
 
-    @Column(length = 100, unique = true, nullable = false)
+    @Column(length = 100, unique = true,  nullable = false)
     private String email;
+
 }

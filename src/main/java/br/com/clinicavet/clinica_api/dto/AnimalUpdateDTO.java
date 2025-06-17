@@ -37,7 +37,7 @@ public class AnimalUpdateDTO {
     @PositiveOrZero(message = "O peso do animal não pode ser negativo.")
     private BigDecimal peso;
 
-    private boolean castrado;
+    private Boolean castrado;
 
     @PastOrPresent
     private LocalDate dataNascimento;
@@ -46,5 +46,5 @@ public class AnimalUpdateDTO {
     private String observacao;
 
     @Positive(message = "O valor do ID deve ser positivo.")
-    private long clienteId;
+    private Long clienteId;
 }

@@ -26,7 +26,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> criarCliente(@RequestBody @Valid ClienteRequestDTO clienteRequestDTO, UriComponentsBuilder uriBuilder) {
         ClienteResponseDTO responseDTO = clienteService.criarCliente(clienteRequestDTO);
-        URI uri = uriBuilder.path("/api/clientes/{id}").buildAndExpand(responseDTO.getClass()).toUri();
+        URI uri = uriBuilder.path("/api/clientes/{id}").buildAndExpand(responseDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDTO);
     }
 
