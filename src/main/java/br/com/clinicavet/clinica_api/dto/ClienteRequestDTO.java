@@ -6,10 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Getter
+@Setter
 public class ClienteRequestDTO {
 
 
@@ -19,7 +23,7 @@ public class ClienteRequestDTO {
     @NotBlank(message = "O cpf não pode ser nulo")
     private String cpf;
 
-    @NotBlank(message = "A Data de Nascimento não pode ser nula")
+    @NotNull(message = "A Data de Nascimento não pode ser nula")
     private LocalDate dataNascimento;
 
     @NotBlank(message = "O telefone não pode ser nulo")

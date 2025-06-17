@@ -57,7 +57,7 @@ public class EAnimal {
     private String observacao;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente_id", nullable = false)
     private ECliente cliente;
 
 }

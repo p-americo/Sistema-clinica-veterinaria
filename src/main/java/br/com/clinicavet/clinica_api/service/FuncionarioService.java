@@ -2,7 +2,6 @@ package br.com.clinicavet.clinica_api.service;
 
 import br.com.clinicavet.clinica_api.dto.FuncionarioRequestDTO;
 import br.com.clinicavet.clinica_api.dto.FuncionarioResponseDTO;
-import br.com.clinicavet.clinica_api.dto.FuncionarioRequestDTO;
 import br.com.clinicavet.clinica_api.model.ECargo;
 import br.com.clinicavet.clinica_api.model.EFuncionario;
 import br.com.clinicavet.clinica_api.model.enums.TipoCargo;
@@ -31,17 +30,14 @@ public class FuncionarioService {
 
     @Transactional
     public FuncionarioResponseDTO criarFuncionario(FuncionarioRequestDTO requestDTO) {
-        // Busca a entidade do cargo
         ECargo cargo = cargoRepository.findById(requestDTO.getCargoId())
                 .orElseThrow(() -> new NoSuchElementException("Cargo não encontrado com o ID: " + requestDTO.getCargoId()));
 
-        // Validação de negócio: se o cargo é VETERINARIO, o CRMV é obrigatório.
         if (cargo.getCargo() == TipoCargo.VETERINARIO) {
             if (requestDTO.getCrmv() == null || requestDTO.getCrmv().isBlank()) {
                 throw new IllegalArgumentException("CRMV é obrigatório para o cargo de Veterinário.");
             }
         } else {
-            // Garante que o CRMV seja nulo para outros cargos
             if (requestDTO.getCrmv() != null && !requestDTO.getCrmv().isBlank()) {
                 throw new IllegalArgumentException("CRMV só pode ser preenchido para o cargo de Veterinário.");
             }
@@ -49,6 +45,8 @@ public class FuncionarioService {
 
         EFuncionario novoFuncionario = modelMapper.map(requestDTO, EFuncionario.class);
         novoFuncionario.setCargo(cargo);
+
+        novoFuncionario.setId(null);
 
         EFuncionario funcionarioSalvo = funcionarioRepository.save(novoFuncionario);
         return modelMapper.map(funcionarioSalvo, FuncionarioResponseDTO.class);
@@ -69,5 +67,5 @@ public class FuncionarioService {
                 .collect(Collectors.toList());
     }
 
-    // Implementação dos métodos de atualizar e deletar seguiria a mesma lógica dos outros serviços
+
 }

@@ -48,5 +48,5 @@ public class AnimalUpdateDTO {
     private String observacao;
 
     @Positive(message = "O valor do ID deve ser positivo.")
-    private long client_id;
+    private long clienteId;
 }

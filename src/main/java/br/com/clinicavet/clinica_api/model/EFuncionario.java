@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Table(name = "funcionarios")
 @Getter
 @Setter
+@PrimaryKeyJoinColumn(name = "pessoa_id")
 public class EFuncionario extends EPessoa {
 
 

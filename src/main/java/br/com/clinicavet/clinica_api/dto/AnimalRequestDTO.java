@@ -55,9 +55,8 @@ public class AnimalRequestDTO {
     @Size(max = 100, message = "A observação deve ter no máximo 100 caracteres.") // Ajuste conforme necessidade
     private String observacao;
 
-    //@NotNull(message = "O ID do cliente é obrigatório.")
-   // @Positive(message = "O valor do ID deve ser positivo.")
-   //private long client_id;
+    @NotNull(message = "O ID do cliente é obrigatório.")
+    private Long clienteId;
 
 
 }

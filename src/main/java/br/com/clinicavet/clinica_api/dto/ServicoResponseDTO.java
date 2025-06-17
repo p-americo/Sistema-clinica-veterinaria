@@ -15,6 +15,4 @@ public class ServicoResponseDTO {
     private TipoServico tipo;
 
     private BigDecimal valor;
-
-    private String nomeVeterinario;
 }

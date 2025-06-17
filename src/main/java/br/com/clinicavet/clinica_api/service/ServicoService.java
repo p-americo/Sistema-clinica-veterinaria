@@ -8,6 +8,7 @@ import br.com.clinicavet.clinica_api.model.enums.TipoCargo;
 import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
 import br.com.clinicavet.clinica_api.repository.ServicoRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.coyote.Request;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,7 +58,7 @@ public class ServicoService {
         }
 
         EServico novoServico = modelMapper.map(dto, EServico.class);
-        novoServico.setVeterinario(veterinario); // Associa a entidade completa
+        novoServico.setId(null); //ADD AQUI SE DER ERRO DE CORRESPONDENCIA
 
         EServico servicoSalvo = servicoRepository.save(novoServico);
         return mapEntidadeParaResponseDTO(servicoSalvo);
@@ -95,10 +96,6 @@ public class ServicoService {
     // Método helper privado para centralizar o mapeamento para o ResponseDTO
     private ServicoResponseDTO mapEntidadeParaResponseDTO(EServico servico) {
         ServicoResponseDTO dto = modelMapper.map(servico, ServicoResponseDTO.class);
-        if (servico.getVeterinario() != null) {
-            // Popula o campo derivado 'nomeVeterinario'
-            dto.setNomeVeterinario(servico.getVeterinario().getNome());
-        }
         return dto;
     }
 }

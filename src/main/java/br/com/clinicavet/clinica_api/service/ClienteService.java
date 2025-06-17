@@ -7,11 +7,7 @@ import br.com.clinicavet.clinica_api.repository.ClienteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // Importe a anotação do Spring
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,8 +16,8 @@ import java.util.stream.Collectors;
 @Service
 public class ClienteService {
 
-    private final ClienteRepository clienteRepository; // É uma boa prática declarar como final
-    private final ModelMapper modelMapper; // É uma boa prática declarar como final
+    private final ClienteRepository clienteRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public ClienteService(ClienteRepository clienteRepository,  ModelMapper modelMapper) {
@@ -31,92 +27,52 @@ public class ClienteService {
 
     @Transactional
     public ClienteResponseDTO criarCliente(ClienteRequestDTO clienteRequestDTO) {
-        // Mapeia o DTO de request para a entidade
         ECliente cliente = modelMapper.map(clienteRequestDTO, ECliente.class);
-        // Salva a nova entidade no banco
         ECliente clienteSalvo = clienteRepository.save(cliente);
-        // Mapeia a entidade salva para o DTO de resposta e retorna
         return modelMapper.map(clienteSalvo, ClienteResponseDTO.class);
     }
 
-
-    @Transactional(readOnly = true) // Otimização para operações de apenas leitura
+    @Transactional(readOnly = true)
     public ClienteResponseDTO buscarClientePorId(Long id) {
         ECliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID: " + id));
         return modelMapper.map(cliente, ClienteResponseDTO.class);
     }
 
-    @Transactional
-    public ClienteResponseDTO buscarClientePorId(Long cliente_id, ClienteRequestDTO clienteRequestDTO) {
-
-        ECliente clienteBuscado = clienteRepository.findById(cliente_id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id));
-
-        return modelMapper.map(clienteBuscado, ClienteResponseDTO.class);
-    }
-
-    @Transactional
-    public List<ClienteRequestDTO> buscaTodosClientes(ClienteRequestDTO clienteRequestDTO) {
-
-        List<ECliente> clientes = clienteRepository.findAll();
-
-        return clientes.stream().map(cliente -> modelMapper.map(cliente, ClienteRequestDTO.class)).collect(Collectors.toList());
-    }
-
-    @Transactional
-    public ClienteResponseDTO atualizarCliente(Long cliente_id, ClienteRequestDTO clienteRequestDTO) {
-
-        ECliente clienteExistente = clienteRepository.findById(cliente_id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id));
-
-        modelMapper.map(clienteRequestDTO, ClienteResponseDTO.class);
-
-        ECliente clienteAtualizado = clienteRepository.save(clienteExistente);
-
-        return modelMapper.map(clienteAtualizado, ClienteResponseDTO.class);
-    }
-
-    @Transactional
-    public ClienteResponseDTO removerCliente(Long cliente_id) {
-
-        ECliente clienteRemovido = clienteRepository.findById(cliente_id).orElseThrow(( -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id);
-
-        clienteRepository.delete(clienteRemovido);
-
-        return modelMapper.map(clienteRemovido, ClienteResponseDTO.class);
-    }
-
-
     @Transactional(readOnly = true)
     public List<ClienteResponseDTO> listarTodosClientes() {
         List<ECliente> clientes = clienteRepository.findAll();
-
         return clientes.stream()
                 .map(cliente -> modelMapper.map(cliente, ClienteResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
-
     @Transactional
     public ClienteResponseDTO atualizarCliente(Long id, ClienteRequestDTO clienteRequestDTO) {
-        // Busca o cliente existente no banco. Se não encontrar, lança exceção.
         ECliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado para atualização com o ID: " + id));
 
         modelMapper.map(clienteRequestDTO, clienteExistente);
 
-        clienteExistente.setId(id);
-
         ECliente clienteAtualizado = clienteRepository.save(clienteExistente);
         return modelMapper.map(clienteAtualizado, ClienteResponseDTO.class);
     }
 
-
     @Transactional
-    public void deletarCliente(Long id) {
-
+    public void deletarCliente(Long id) { // Este método está correto e é o preferencial
         if (!clienteRepository.existsById(id)) {
             throw new NoSuchElementException("Cliente não encontrado para deleção com o ID: " + id);
         }
         clienteRepository.deleteById(id);
+    }
+
+    @Transactional
+    public ClienteResponseDTO removerCliente(Long cliente_id) {
+        // Correção aqui
+        ECliente clienteRemovido = clienteRepository.findById(cliente_id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id));
+
+        clienteRepository.delete(clienteRemovido);
+
+        return modelMapper.map(clienteRemovido, ClienteResponseDTO.class);
     }
 }

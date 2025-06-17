@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/animais")
@@ -56,10 +57,16 @@ public class AnimalController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-    @DeleteMapping
-    public ResponseEntity<AnimalResponseDTO> deletarAnimal(@PathVariable long id){
-
-        AnimalResponseDTO animalResponseDTO = animalService.deleteAnimal(id);
-        return  ResponseEntity.ok().body(animalResponseDTO);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAnimal(@PathVariable Long id) {
+        try {
+            animalService.deletarAnimal(id);
+            // Se a linha acima não lançar exceção, a exclusão foi bem-sucedida.
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            // Se o serviço lançou a exceção, o animal não foi encontrado.
+            return ResponseEntity.notFound().build();
+        }
     }
 }
+
