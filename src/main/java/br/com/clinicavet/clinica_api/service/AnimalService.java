@@ -66,6 +66,7 @@ public class AnimalService {
     }
 
     @Transactional
+<<<<<<< HEAD
     public AnimalResponseDTO atualizarAnimal(long animalId, AnimalUpdateDTO animalDTO) {
         EAnimal animalExistente = animalRepository.findById(animalId)
                 .orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + animalId));
@@ -79,6 +80,22 @@ public class AnimalService {
         modelMapper.map(animalDTO, animalExistente);
         EAnimal animalAtualizado = animalRepository.save(animalExistente);
 
+=======
+    public AnimalResponseDTO atualizarAnimal(Long animalId, AnimalUpdateDTO animalDTO) { // animalId vem da URL
+        EAnimal animalExistente = animalRepository.findById(animalId)
+                .orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + animalId));
+
+        // Usa ModelMapper para aplicar as atualizações do DTO na entidade existente
+        // Como o ModelMapper está configurado para pular nulos, ele só atualizará os campos que vieram no DTO
+        modelMapper.map(animalDTO, animalExistente);
+
+            ECliente novoCliente = clienteRepository.findById(animalDTO.getClienteId())
+                    .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID: " + animalDTO.getClienteId()));
+            animalExistente.setCliente(novoCliente);
+
+
+        EAnimal animalAtualizado = animalRepository.save(animalExistente);
+>>>>>>> 706af775a0d67d65b0905a6902f09b7ba8138bd6
         return mapEntidadeParaResponse(animalAtualizado);
     }
 

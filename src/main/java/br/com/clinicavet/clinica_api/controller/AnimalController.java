@@ -57,6 +57,7 @@ public class AnimalController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+<<<<<<< HEAD
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAnimal(@PathVariable Long id) {
         try {
@@ -67,6 +68,13 @@ public class AnimalController {
             // Se o serviço lançou a exceção, o animal não foi encontrado.
             return ResponseEntity.notFound().build();
         }
+=======
+    @DeleteMapping
+    public ResponseEntity<AnimalResponseDTO> deletarAnimal(@PathVariable long id){
+
+        animalService.deletarAnimal(id);
+        return  ResponseEntity.noContent().build();
+>>>>>>> 706af775a0d67d65b0905a6902f09b7ba8138bd6
     }
 }
 

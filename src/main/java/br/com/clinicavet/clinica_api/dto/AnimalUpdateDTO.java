@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 @Getter
 @Setter
@@ -16,9 +17,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 
 public class AnimalUpdateDTO {
-
-    @NotBlank
-    private Long id;
 
     @Size(max = 50)
     private String nome;
@@ -35,9 +33,9 @@ public class AnimalUpdateDTO {
     @Size(max = 15)
     private String cor;
 
-    @PositiveOrZero
-    @Size(max = 5)
-    private double peso;
+    @NotNull(message = "O peso do animal é obrigatório.")
+    @PositiveOrZero(message = "O peso do animal não pode ser negativo.")
+    private BigDecimal peso;
 
     private boolean castrado;
 

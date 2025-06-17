@@ -24,6 +24,10 @@ public class ClienteRequestDTO {
     private String cpf;
 
     @NotNull(message = "A Data de Nascimento não pode ser nula")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 706af775a0d67d65b0905a6902f09b7ba8138bd6
     private LocalDate dataNascimento;
 
     @NotBlank(message = "O telefone não pode ser nulo")
