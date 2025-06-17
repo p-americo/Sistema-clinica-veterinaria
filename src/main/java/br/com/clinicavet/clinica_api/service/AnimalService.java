@@ -40,8 +40,6 @@ public class AnimalService {
 
         EAnimal novoAnimal = modelMapper.map(animalDTO, EAnimal.class);
 
-        // FORÇA O ID A SER NULO ANTES DE SALVAR
-        // Esta é a garantia de que a operação será um INSERT.
         novoAnimal.setId(null);
 
         novoAnimal.setCliente(cliente);
