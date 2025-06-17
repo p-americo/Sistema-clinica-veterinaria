@@ -15,12 +15,9 @@ public class ClienteUpdateDTO {
 
     private String cpf;
 
-
     private LocalDate dataNascimento;
 
-
     private String telefone;
-
 
     private String email;
 }
