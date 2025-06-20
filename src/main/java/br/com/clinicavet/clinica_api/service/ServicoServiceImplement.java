@@ -2,21 +2,17 @@ package br.com.clinicavet.clinica_api.service;
 
 import br.com.clinicavet.clinica_api.dto.ServicoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.ServicoResponseDTO;
-import br.com.clinicavet.clinica_api.model.EFuncionario;
-import br.com.clinicavet.clinica_api.model.EServico;
+import br.com.clinicavet.clinica_api.model.TipoFuncionario;
+import br.com.clinicavet.clinica_api.model.TipoServico;
 import br.com.clinicavet.clinica_api.model.enums.TipoCargo;
 import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
 import br.com.clinicavet.clinica_api.repository.ServicoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ServicoService {
@@ -25,7 +21,7 @@ public class ServicoService {
     private final FuncionarioRepository funcionarioRepository;
     private final ModelMapper modelMapper;
 
-    @Autowired
+
     public ServicoService(ServicoRepository servicoRepository, FuncionarioRepository funcionarioRepository, ModelMapper modelMapper) {
         this.servicoRepository = servicoRepository;
         this.funcionarioRepository = funcionarioRepository;
@@ -40,7 +36,7 @@ public class ServicoService {
 
     @Transactional(readOnly = true)
     public ServicoResponseDTO obterServicoPorId(Long id) {
-        EServico servico = servicoRepository.findById(id)
+        TipoServico servico = servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Serviço não encontrado com o ID: " + id));
         return mapEntidadeParaResponseDTO(servico);
     }
@@ -48,26 +44,26 @@ public class ServicoService {
     @Transactional
     public ServicoResponseDTO cadastrarServico(ServicoRequestDTO dto) {
 
-        EFuncionario veterinario = funcionarioRepository.findById(dto.getVeterinarioId())
+        TipoFuncionario veterinario = funcionarioRepository.findById(dto.getVeterinarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Veterinário não encontrado com o ID: " + dto.getVeterinarioId()));
 
         if (veterinario.getCargo() == null || veterinario.getCargo().getCargo() != TipoCargo.VETERINARIO) {
             throw new IllegalArgumentException("O funcionário com ID " + veterinario.getId() + " não é um veterinário.");
         }
 
-        EServico novoServico = modelMapper.map(dto, EServico.class);
+        TipoServico novoServico = modelMapper.map(dto, TipoServico.class);
         novoServico.setVeterinario(veterinario); // Associa a entidade completa
 
-        EServico servicoSalvo = servicoRepository.save(novoServico);
+        TipoServico servicoSalvo = servicoRepository.save(novoServico);
         return mapEntidadeParaResponseDTO(servicoSalvo);
     }
 
     @Transactional
     public ServicoResponseDTO atualizarServico(Long id, ServicoRequestDTO dto) {
-        EServico servicoExistente = servicoRepository.findById(id)
+        TipoServico servicoExistente = servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Serviço não encontrado para atualização com o ID: " + id));
 
-        EFuncionario veterinario = funcionarioRepository.findById(dto.getVeterinarioId())
+        TipoFuncionario veterinario = funcionarioRepository.findById(dto.getVeterinarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Veterinário não encontrado com o ID: " + dto.getVeterinarioId()));
 
         // Valida se o funcionário informado é um veterinário
@@ -79,7 +75,7 @@ public class ServicoService {
         servicoExistente.setVeterinario(veterinario); // Reassocia o veterinário
         servicoExistente.setId(id); // Garante que o ID não seja alterado
 
-        EServico servicoAtualizado = servicoRepository.save(servicoExistente);
+        TipoServico servicoAtualizado = servicoRepository.save(servicoExistente);
         return mapEntidadeParaResponseDTO(servicoAtualizado);
     }
 
@@ -92,7 +88,7 @@ public class ServicoService {
     }
 
     // Método helper privado para centralizar o mapeamento para o ResponseDTO
-    private ServicoResponseDTO mapEntidadeParaResponseDTO(EServico servico) {
+    private ServicoResponseDTO mapEntidadeParaResponseDTO(TipoServico servico) {
         ServicoResponseDTO dto = modelMapper.map(servico, ServicoResponseDTO.class);
         if (servico.getVeterinario() != null) {
             // Popula o campo derivado 'nomeVeterinario'

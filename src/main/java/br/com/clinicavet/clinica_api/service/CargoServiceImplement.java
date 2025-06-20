@@ -2,9 +2,9 @@ package br.com.clinicavet.clinica_api.service;
 
 import br.com.clinicavet.clinica_api.dto.CargoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.CargoResponseDTO;
-import br.com.clinicavet.clinica_api.model.ECargo;
+import br.com.clinicavet.clinica_api.model.TipoCargo;
 import br.com.clinicavet.clinica_api.repository.CargoRepository;
-import br.com.clinicavet.clinica_api.repository.FuncionarioRepository; // Precisamos para a validação de deleção
+import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +34,8 @@ public class CargoService {
                     throw new IllegalArgumentException("Este tipo de cargo já existe.");
                 });
 
-        ECargo novoCargo = modelMapper.map(requestDTO, ECargo.class);
-        ECargo cargoSalvo = cargoRepository.save(novoCargo);
+        TipoCargo novoCargo = modelMapper.map(requestDTO, TipoCargo.class);
+        TipoCargo cargoSalvo = cargoRepository.save(novoCargo);
         return modelMapper.map(cargoSalvo, CargoResponseDTO.class);
     }
 
@@ -48,14 +48,14 @@ public class CargoService {
 
     @Transactional(readOnly = true)
     public CargoResponseDTO buscarPorId(Long id) {
-        ECargo cargo = cargoRepository.findById(id)
+        TipoCargo cargo = cargoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cargo não encontrado com o ID: " + id));
         return modelMapper.map(cargo, CargoResponseDTO.class);
     }
 
     @Transactional
     public CargoResponseDTO atualizarCargo(Long id, CargoRequestDTO requestDTO) {
-        ECargo cargoExistente = cargoRepository.findById(id)
+        TipoCargo cargoExistente = cargoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cargo não encontrado para atualização com o ID: " + id));
 
         // Verifica se o novo nome de cargo já está em uso por outro cargo
@@ -69,7 +69,7 @@ public class CargoService {
         modelMapper.map(requestDTO, cargoExistente);
         cargoExistente.setId(id); // Garante que o ID não seja alterado
 
-        ECargo cargoAtualizado = cargoRepository.save(cargoExistente);
+        TipoCargo cargoAtualizado = cargoRepository.save(cargoExistente);
         return modelMapper.map(cargoAtualizado, CargoResponseDTO.class);
     }
 

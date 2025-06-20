@@ -3,8 +3,8 @@ package br.com.clinicavet.clinica_api.service;
 import br.com.clinicavet.clinica_api.dto.AnimalRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AnimalResponseDTO;
 import br.com.clinicavet.clinica_api.dto.AnimalUpdateDTO;
-import br.com.clinicavet.clinica_api.model.EAnimal;
-import br.com.clinicavet.clinica_api.model.ECliente;
+import br.com.clinicavet.clinica_api.model.TipoAnimal;
+import br.com.clinicavet.clinica_api.model.TipoCliente;
 import br.com.clinicavet.clinica_api.repository.AnimalRepository;
 import br.com.clinicavet.clinica_api.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
@@ -35,23 +35,23 @@ public class AnimalService {
 
     @Transactional
     public AnimalResponseDTO criarAnimal(AnimalRequestDTO animalDTO) {
-        ECliente cliente = clienteRepository.findById(animalDTO.getClienteId())
+        TipoCliente cliente = clienteRepository.findById(animalDTO.getClienteId())
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID: " + animalDTO.getClienteId()));
 
-        EAnimal novoAnimal = modelMapper.map(animalDTO, EAnimal.class);
+        TipoAnimal novoAnimal = modelMapper.map(animalDTO, TipoAnimal.class);
 
         novoAnimal.setId(null);
 
         novoAnimal.setCliente(cliente);
 
-        EAnimal animalSalvo = animalRepository.save(novoAnimal);
+        TipoAnimal animalSalvo = animalRepository.save(novoAnimal);
 
         return mapEntidadeParaResponse(animalSalvo);
     }
 
     @Transactional
     public AnimalResponseDTO buscarAnimalPorId(long animalId) {
-        EAnimal animal = animalRepository.findById(animalId)
+        TipoAnimal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + animalId));
         return mapEntidadeParaResponse(animal);
     }
@@ -65,7 +65,7 @@ public class AnimalService {
 
     @Transactional
     public AnimalResponseDTO atualizarAnimal(Long animalId, AnimalUpdateDTO animalDTO) {
-        EAnimal animalExistente = animalRepository.findById(animalId)
+        TipoAnimal animalExistente = animalRepository.findById(animalId)
                 .orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + animalId));
 
         modelMapper.map(animalDTO, animalExistente);
@@ -73,14 +73,14 @@ public class AnimalService {
         if (animalDTO.getClienteId() != null) {
 
             if (animalExistente.getCliente() == null || !animalDTO.getClienteId().equals(animalExistente.getCliente().getId())) {
-                ECliente novoCliente = clienteRepository.findById(animalDTO.getClienteId())
+                TipoCliente novoCliente = clienteRepository.findById(animalDTO.getClienteId())
                         .orElseThrow(() -> new NoSuchElementException("Novo cliente (dono) não encontrado com o ID: " + animalDTO.getClienteId()));
 
                 animalExistente.setCliente(novoCliente);
             }
         }
 
-        EAnimal animalAtualizado = animalRepository.save(animalExistente);
+        TipoAnimal animalAtualizado = animalRepository.save(animalExistente);
         return mapEntidadeParaResponse(animalAtualizado);
     }
 
@@ -92,7 +92,7 @@ public class AnimalService {
         animalRepository.deleteById(animalId);
     }
 
-    private AnimalResponseDTO mapEntidadeParaResponse(EAnimal animal) {
+    private AnimalResponseDTO mapEntidadeParaResponse(TipoAnimal animal) {
         AnimalResponseDTO dto = modelMapper.map(animal, AnimalResponseDTO.class);
 
         if (animal.getDataNascimento() != null) {

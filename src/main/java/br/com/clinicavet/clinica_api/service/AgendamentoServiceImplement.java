@@ -3,6 +3,7 @@ package br.com.clinicavet.clinica_api.service;
 // Importe todos os seus DTOs, Entidades e Repositórios necessários
 import br.com.clinicavet.clinica_api.dto.AgendamentoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AgendamentoResponseDTO;
+import br.com.clinicavet.clinica_api.dto.AgendamentoUpdateDTO;
 import br.com.clinicavet.clinica_api.model.*; // EAnimal, ECliente, EServico, EAgendamento
 import br.com.clinicavet.clinica_api.model.enums.StatusAgendamento; // Importe seu Enum de Status
 import br.com.clinicavet.clinica_api.repository.*; // Todos os repositórios
@@ -18,7 +19,9 @@ import java.util.stream.Collectors;
 @Service
 public class AgendamentoService {
 
-    // Injeção de todas as dependências necessárias
+    // @Autowired faz a injeção das dependecias na classe, caso delcare somente em cima do atributo
+    // a não sem construtor o atributo não pode ser final = mutavel
+    // indicar no construtor
     private final AgendamentoRepository agendamentoRepository;
     private final AnimalRepository animalRepository;
     private final ServicoRepository servicoRepository;
@@ -26,6 +29,7 @@ public class AgendamentoService {
     private final ModelMapper modelMapper;
 
     @Autowired
+
     public AgendamentoService(AgendamentoRepository agendamentoRepository, AnimalRepository animalRepository, ServicoRepository servicoRepository, ClienteRepository clienteRepository, ModelMapper modelMapper) {
         this.agendamentoRepository = agendamentoRepository;
         this.animalRepository = animalRepository;
@@ -37,16 +41,18 @@ public class AgendamentoService {
     @Transactional
     public AgendamentoResponseDTO criarAgendamento(AgendamentoRequestDTO requestDTO) {
         // Busca as entidades relacionadas
-        ECliente cliente = clienteRepository.findById(requestDTO.getClienteId()).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado"));
-        EAnimal animal = animalRepository.findById(requestDTO.getAnimalId()).orElseThrow(() -> new NoSuchElementException("Animal não encontrado"));
-        EServico servico = servicoRepository.findById(requestDTO.getServicoId()).orElseThrow(() -> new NoSuchElementException("Serviço não encontrado"));
+        TipoCliente cliente = clienteRepository.findById(requestDTO.getClienteId()).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado"));
+        TipoAnimal animal = animalRepository.findById(requestDTO.getAnimalId()).orElseThrow(() -> new NoSuchElementException("Animal não encontrado"));
+        TipoServico servico = servicoRepository.findById(requestDTO.getServicoId()).orElseThrow(() -> new NoSuchElementException("Serviço não encontrado"));
 
 
         if (!animal.getCliente().getId().equals(cliente.getId())) {
             throw new IllegalArgumentException("O animal informado não pertence ao cliente especificado.");
         }
 
-        EAgendamento novoAgendamento = new EAgendamento();
+
+
+        TipoAgendamento novoAgendamento = new TipoAgendamento();
         novoAgendamento.setCliente(cliente);
         novoAgendamento.setAnimal(animal);
         novoAgendamento.setServico(servico);
@@ -56,7 +62,7 @@ public class AgendamentoService {
         // Define o status inicial programmaticamente. O cliente não pode escolher isso.
         //novoAgendamento.setStatus(StatusAgendamento.AGENDADO);
 
-        EAgendamento agendamentoSalvo = agendamentoRepository.save(novoAgendamento);
+        TipoAgendamento agendamentoSalvo = agendamentoRepository.save(novoAgendamento);
 
         return modelMapper.map(agendamentoSalvo, AgendamentoResponseDTO.class);
     }
@@ -64,7 +70,7 @@ public class AgendamentoService {
 
     @Transactional
     public AgendamentoResponseDTO cancelarAgendamento(Long id) {
-        EAgendamento agendamento = agendamentoRepository.findById(id)
+        TipoAgendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
 
         // Lógica de negócio: talvez você não possa cancelar um agendamento que já foi realizado.
@@ -80,7 +86,7 @@ public class AgendamentoService {
 
     @Transactional(readOnly = true)
     public AgendamentoResponseDTO buscarPorId(Long id) {
-        EAgendamento agendamento = agendamentoRepository.findById(id)
+        TipoAgendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
         return modelMapper.map(agendamento, AgendamentoResponseDTO.class);
     }
@@ -95,7 +101,7 @@ public class AgendamentoService {
 
     @Transactional
     public AgendamentoResponseDTO confirmarAgendamento(Long id) {
-        EAgendamento agendamento = agendamentoRepository.findById(id)
+        TipoAgendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
 
         if (agendamento.getStatus() != StatusAgendamento.AGENDADO) {
@@ -107,6 +113,23 @@ public class AgendamentoService {
         agendamentoRepository.save(agendamento);
 
         return modelMapper.map(agendamento, AgendamentoResponseDTO.class);
+    }
 
+    @Transactional
+    public AgendamentoResponseDTO atualizarAgendamento(Long id, AgendamentoUpdateDTO updateDTO) {
+
+        TipoAgendamento agendamentoExistente = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado para atualização com o ID: " + id));
+
+        if (agendamentoExistente.getStatus() == StatusAgendamento.CANCELADO ||
+                agendamentoExistente.getStatus() == StatusAgendamento.REALIZADO) {
+            throw new IllegalStateException("Não é possível alterar um agendamento com status " + agendamentoExistente.getStatus());
+        }
+
+        modelMapper.map(updateDTO, agendamentoExistente);
+
+        TipoAgendamento agendamentoAtualizado = agendamentoRepository.save(agendamentoExistente);
+
+        return modelMapper.map(agendamentoAtualizado, AgendamentoResponseDTO.class);
     }
 }
