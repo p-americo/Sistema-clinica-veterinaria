@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EAgendamento {
+public class TipoAgendamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +19,15 @@ public class EAgendamento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id", nullable = false)
-    private EAnimal animal;
+    private TipoAnimal animal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "servico_id", nullable = false)
-    private EServico servico;
+    private TipoServico servico;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
-    private ECliente cliente;
+    private TipoCliente cliente;
 
     @Column(name = "data_hora_agendamento", nullable = false)
     private LocalDateTime dataHoraAgendamento;

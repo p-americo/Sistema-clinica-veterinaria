@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @PrimaryKeyJoinColumn(name = "pessoa_id")
-public class EFuncionario extends EPessoa {
+public class TipoFuncionario extends TipoPessoa {
 
 
     @Column(name = "data_admissao", nullable = false)
@@ -18,7 +18,7 @@ public class EFuncionario extends EPessoa {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cargo_id", nullable = false)
-    private ECargo cargo;
+    private TipoCargo cargo;
 
     @Column(name = "crmv", unique = true)
     private String crmv;

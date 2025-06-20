@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-public class EPessoa {
+public class TipoPessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

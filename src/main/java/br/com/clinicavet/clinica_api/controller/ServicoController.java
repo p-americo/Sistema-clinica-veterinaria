@@ -2,7 +2,7 @@ package br.com.clinicavet.clinica_api.controller;
 
 import br.com.clinicavet.clinica_api.dto.ServicoRequestDTO; // << DTO para entrada
 import br.com.clinicavet.clinica_api.dto.ServicoResponseDTO; // << DTO para saída
-import br.com.clinicavet.clinica_api.service.ServicoService;
+import br.com.clinicavet.clinica_api.service.ServicoServiceImplement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import java.net.URI;
 @RequestMapping("/api/servicos")
 public class ServicoController {
 
-    private final ServicoService service;
+    private final ServicoServiceImplement service;
 
     @Autowired
-    public ServicoController(ServicoService service) {
+    public ServicoController(ServicoServiceImplement service) {
         this.service = service;
     }
 

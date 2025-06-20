@@ -2,7 +2,7 @@ package br.com.clinicavet.clinica_api.controller;
 
 import br.com.clinicavet.clinica_api.dto.ClienteRequestDTO;
 import br.com.clinicavet.clinica_api.dto.ClienteResponseDTO;
-import br.com.clinicavet.clinica_api.service.ClienteService;
+import br.com.clinicavet.clinica_api.service.ClienteServiceImplement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,41 +16,41 @@ import java.util.List;
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
-    private final ClienteService clienteService;
+    private final ClienteServiceImplement clienteServiceImplement;
 
     @Autowired
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
+    public ClienteController(ClienteServiceImplement clienteServiceImplement) {
+        this.clienteServiceImplement = clienteServiceImplement;
     }
 
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> criarCliente(@RequestBody @Valid ClienteRequestDTO clienteRequestDTO, UriComponentsBuilder uriBuilder) {
-        ClienteResponseDTO responseDTO = clienteService.criarCliente(clienteRequestDTO);
+        ClienteResponseDTO responseDTO = clienteServiceImplement.criarCliente(clienteRequestDTO);
         URI uri = uriBuilder.path("/api/clientes/{id}").buildAndExpand(responseDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDTO);
     }
 
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> listarTodosClientes() {
-        List<ClienteResponseDTO> listaClientes = clienteService.listarTodosClientes();
+        List<ClienteResponseDTO> listaClientes = clienteServiceImplement.listarTodosClientes();
         return ResponseEntity.ok(listaClientes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> buscarClientePorId(@PathVariable Long id) {
-        ClienteResponseDTO responseDTO = clienteService.buscarClientePorId(id);
+        ClienteResponseDTO responseDTO = clienteServiceImplement.buscarClientePorId(id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteRequestDTO) {
-        ClienteResponseDTO responseDTO = clienteService.atualizarCliente(id, clienteRequestDTO);
+        ClienteResponseDTO responseDTO = clienteServiceImplement.atualizarCliente(id, clienteRequestDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
-        clienteService.deletarCliente(id);
+        clienteServiceImplement.deletarCliente(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -17,14 +17,14 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class FuncionarioService {
+public class FuncionarioServiceImplement {
 
     private final FuncionarioRepository funcionarioRepository;
     private final CargoRepository cargoRepository;
     private final ModelMapper modelMapper;
     private final ServicoRepository servicoRepository;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository, ModelMapper modelMapper, ServicoRepository servicoRepository) {
+    public FuncionarioServiceImplement(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository, ModelMapper modelMapper, ServicoRepository servicoRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.cargoRepository = cargoRepository;
         this.modelMapper = modelMapper;

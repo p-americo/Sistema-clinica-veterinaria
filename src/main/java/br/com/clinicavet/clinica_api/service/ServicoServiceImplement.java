@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ServicoService {
+public class ServicoServiceImplement {
 
     private final ServicoRepository servicoRepository; // Boa prática: usar 'final'
     private final FuncionarioRepository funcionarioRepository;
     private final ModelMapper modelMapper;
 
 
-    public ServicoService(ServicoRepository servicoRepository, FuncionarioRepository funcionarioRepository, ModelMapper modelMapper) {
+    public ServicoServiceImplement(ServicoRepository servicoRepository, FuncionarioRepository funcionarioRepository, ModelMapper modelMapper) {
         this.servicoRepository = servicoRepository;
         this.funcionarioRepository = funcionarioRepository;
         this.modelMapper = modelMapper;

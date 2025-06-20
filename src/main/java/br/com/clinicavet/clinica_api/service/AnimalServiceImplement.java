@@ -9,7 +9,6 @@ import br.com.clinicavet.clinica_api.repository.AnimalRepository;
 import br.com.clinicavet.clinica_api.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,14 +18,14 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class AnimalService {
+public class AnimalServiceImplement {
 
     private final AnimalRepository animalRepository;
     private final ModelMapper modelMapper;
     private final ClienteRepository clienteRepository;
 
-    @Autowired
-    public AnimalService(AnimalRepository animalRepository, ModelMapper modelMapper, ClienteRepository clienteRepository) {
+
+    public AnimalServiceImplement(AnimalRepository animalRepository, ModelMapper modelMapper, ClienteRepository clienteRepository) {
         this.animalRepository = animalRepository;
         this.modelMapper = modelMapper;
         this.clienteRepository = clienteRepository;

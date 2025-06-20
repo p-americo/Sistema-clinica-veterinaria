@@ -1,6 +1,5 @@
 package br.com.clinicavet.clinica_api.model;
 
-import br.com.clinicavet.clinica_api.model.enums.TipoServico;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class EServico {
+public class TipoServico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +20,11 @@ public class EServico {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoServico tipo;
+    private br.com.clinicavet.clinica_api.model.enums.TipoServico tipo;
 
     @ManyToOne
     @JoinColumn(name = "veterinario_id", nullable = false)
-    private EFuncionario veterinario;
+    private TipoFuncionario veterinario;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal valor;

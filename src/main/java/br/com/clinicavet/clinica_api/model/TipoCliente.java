@@ -16,12 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @PrimaryKeyJoinColumn(name = "pessoa_id")
-public class ECliente extends EPessoa {
+public class TipoCliente extends TipoPessoa {
 
     @CreatedDate
     @Column(name = "data_cadastro", nullable = false, updatable = false)
     private LocalDate dataCadastro;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<EAnimal> animais;
+    private List<TipoAnimal> animais;
 }

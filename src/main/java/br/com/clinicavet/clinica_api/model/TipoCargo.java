@@ -1,6 +1,5 @@
 package br.com.clinicavet.clinica_api.model;
 
-import br.com.clinicavet.clinica_api.model.enums.TipoCargo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ECargo {
+public class TipoCargo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // << Especificar a estratégia
@@ -21,12 +20,12 @@ public class ECargo {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private TipoCargo cargo;
+    private br.com.clinicavet.clinica_api.model.enums.TipoCargo cargo;
 
     @Column(nullable = false, precision = 10, scale = 2) // Definindo precisão para o banco
     private BigDecimal salario;
 
     @OneToMany(mappedBy = "cargo")
-    private List<EFuncionario> funcionarios;
+    private List<TipoFuncionario> funcionarios;
 
 }

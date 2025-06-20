@@ -3,7 +3,7 @@ package br.com.clinicavet.clinica_api.controller;
 import br.com.clinicavet.clinica_api.dto.AnimalRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AnimalResponseDTO;
 import br.com.clinicavet.clinica_api.dto.AnimalUpdateDTO;
-import br.com.clinicavet.clinica_api.service.AnimalService;
+import br.com.clinicavet.clinica_api.service.AnimalServiceImplement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +17,16 @@ import java.util.List;
 @RequestMapping("/api/animais")
 public class AnimalController {
 
-    private AnimalService animalService;
+    private AnimalServiceImplement animalServiceImplement;
 
     @Autowired
-    public AnimalController(AnimalService animalService) {
-        this.animalService = animalService;
+    public AnimalController(AnimalServiceImplement animalServiceImplement) {
+        this.animalServiceImplement = animalServiceImplement;
     }
 
     @PostMapping
     public ResponseEntity<AnimalResponseDTO> criarAnimal(@RequestBody @Valid AnimalRequestDTO animalRequestDTO, UriComponentsBuilder uriComponentsBuilder) {
-        AnimalResponseDTO responseDTO = animalService.criarAnimal(animalRequestDTO);
+        AnimalResponseDTO responseDTO = animalServiceImplement.criarAnimal(animalRequestDTO);
 
         URI uri = uriComponentsBuilder.path("/api/animais/{id}").buildAndExpand(responseDTO.getId()).toUri();
 
@@ -36,7 +36,7 @@ public class AnimalController {
     @GetMapping
     public ResponseEntity<List<AnimalResponseDTO>> buscarTodosAnimais() {
 
-        List<AnimalResponseDTO> listaAnimais = animalService.buscarTodosAnimais();
+        List<AnimalResponseDTO> listaAnimais = animalServiceImplement.buscarTodosAnimais();
 
         return  ResponseEntity.ok(listaAnimais);
     }
@@ -44,7 +44,7 @@ public class AnimalController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AnimalResponseDTO> buscarAnimalPorId(@PathVariable long id){
-        AnimalResponseDTO responseDTO = animalService.buscarAnimalPorId(id);
+        AnimalResponseDTO responseDTO = animalServiceImplement.buscarAnimalPorId(id);
         return ResponseEntity.ok().body(responseDTO);
 
     }
@@ -52,14 +52,14 @@ public class AnimalController {
     @PutMapping("/{id}")
     public ResponseEntity<AnimalResponseDTO> atualizarAnimal(@PathVariable long id, @RequestBody @Valid AnimalUpdateDTO animalDTO) {
 
-        AnimalResponseDTO responseDTO = animalService.atualizarAnimal(id, animalDTO);
+        AnimalResponseDTO responseDTO = animalServiceImplement.atualizarAnimal(id, animalDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAnimal(@PathVariable long id) {
-        animalService.deletarAnimal(id);
+        animalServiceImplement.deletarAnimal(id);
         return ResponseEntity.noContent().build();
     }
 }

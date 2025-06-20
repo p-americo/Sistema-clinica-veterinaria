@@ -7,11 +7,7 @@ import java.time.LocalDate;
 
 public class ClienteUpdateDTO {
 
-
-
-
     private String nome;
-
 
     private String cpf;
 

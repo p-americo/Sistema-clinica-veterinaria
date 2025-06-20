@@ -1,4 +1,4 @@
-package br.com.clinicavet.clinica_api.service;
+package br.com.clinicavet.clinica_api.service.Interface;
 
 import br.com.clinicavet.clinica_api.dto.AgendamentoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AgendamentoResponseDTO;
@@ -12,7 +12,7 @@ public interface AgendamentoService {
 
     AgendamentoResponseDTO atualizarAgendamento(Long id, AgendamentoUpdateDTO updateDTO);
 
-    AgendamentoResponseDTO deletarAgendamento(Long id);
+    void deletarAgendamento(Long id);
 
     List<AgendamentoResponseDTO> listarTodos();
 
@@ -21,6 +21,9 @@ public interface AgendamentoService {
     AgendamentoResponseDTO cancelarAgendamento(Long id);
 
     AgendamentoResponseDTO confirmarAgendamento(Long id);
+
+    AgendamentoResponseDTO realizarAgendamento(Long id);
+
 
 
 }

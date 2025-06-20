@@ -28,5 +28,7 @@ public class FuncionarioUpdateDTO {
     @PastOrPresent(message = "A data de admissão não pode ser futura.")
     private LocalDate dataAdmissao;
 
+    private String crmv;
+
     private Long cargoId; // Permite alterar o cargo
 }

@@ -1,8 +1,7 @@
 package br.com.clinicavet.clinica_api.repository;
 
-import br.com.clinicavet.clinica_api.model.EAnimal;
+import br.com.clinicavet.clinica_api.model.TipoAnimal;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 
-public interface AnimalRepository extends JpaRepository<EAnimal, Long> {
+public interface AnimalRepository extends JpaRepository<TipoAnimal, Long> {
 }

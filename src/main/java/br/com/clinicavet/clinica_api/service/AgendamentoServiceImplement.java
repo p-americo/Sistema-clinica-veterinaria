@@ -1,36 +1,37 @@
 package br.com.clinicavet.clinica_api.service;
 
-// Importe todos os seus DTOs, Entidades e Repositórios necessários
+
 import br.com.clinicavet.clinica_api.dto.AgendamentoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AgendamentoResponseDTO;
 import br.com.clinicavet.clinica_api.dto.AgendamentoUpdateDTO;
 import br.com.clinicavet.clinica_api.model.*; // EAnimal, ECliente, EServico, EAgendamento
 import br.com.clinicavet.clinica_api.model.enums.StatusAgendamento; // Importe seu Enum de Status
 import br.com.clinicavet.clinica_api.repository.*; // Todos os repositórios
+import br.com.clinicavet.clinica_api.service.Interface.AgendamentoService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+
 @Service
-public class AgendamentoService {
+public class AgendamentoServiceImplement implements AgendamentoService {
 
     // @Autowired faz a injeção das dependecias na classe, caso delcare somente em cima do atributo
     // a não sem construtor o atributo não pode ser final = mutavel
-    // indicar no construtor
+    // indicar no construtor, antes se tinha mais contruttores,
     private final AgendamentoRepository agendamentoRepository;
     private final AnimalRepository animalRepository;
     private final ServicoRepository servicoRepository;
     private final ClienteRepository clienteRepository;
     private final ModelMapper modelMapper;
 
-    @Autowired
 
-    public AgendamentoService(AgendamentoRepository agendamentoRepository, AnimalRepository animalRepository, ServicoRepository servicoRepository, ClienteRepository clienteRepository, ModelMapper modelMapper) {
+    public AgendamentoServiceImplement(AgendamentoRepository agendamentoRepository, AnimalRepository animalRepository, ServicoRepository servicoRepository, ClienteRepository clienteRepository, ModelMapper modelMapper) {
         this.agendamentoRepository = agendamentoRepository;
         this.animalRepository = animalRepository;
         this.servicoRepository = servicoRepository;
@@ -49,7 +50,6 @@ public class AgendamentoService {
         if (!animal.getCliente().getId().equals(cliente.getId())) {
             throw new IllegalArgumentException("O animal informado não pertence ao cliente especificado.");
         }
-
 
 
         TipoAgendamento novoAgendamento = new TipoAgendamento();
@@ -85,7 +85,7 @@ public class AgendamentoService {
 
 
     @Transactional(readOnly = true)
-    public AgendamentoResponseDTO buscarPorId(Long id) {
+    public AgendamentoResponseDTO listarPorId(Long id) {
         TipoAgendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
         return modelMapper.map(agendamento, AgendamentoResponseDTO.class);
@@ -131,5 +131,21 @@ public class AgendamentoService {
         TipoAgendamento agendamentoAtualizado = agendamentoRepository.save(agendamentoExistente);
 
         return modelMapper.map(agendamentoAtualizado, AgendamentoResponseDTO.class);
+    }
+
+    public AgendamentoResponseDTO realizarAgendamento(Long id) {
+
+        TipoAgendamento realizarAgendamento = agendamentoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
+
+        realizarAgendamento.setStatus(StatusAgendamento.REALIZADO);
+        agendamentoRepository.save(realizarAgendamento);
+        return modelMapper.map(realizarAgendamento, AgendamentoResponseDTO.class);
+    }
+
+    public void deletarAgendamento(Long id) {
+
+        TipoAgendamento deletarAgendameto =  agendamentoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
+
+        agendamentoRepository.deleteById(id);
     }
 }

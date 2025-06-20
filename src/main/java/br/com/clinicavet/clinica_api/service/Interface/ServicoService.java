@@ -1,4 +1,4 @@
-package br.com.clinicavet.clinica_api.service;
+package br.com.clinicavet.clinica_api.service.Interface;
 
 import br.com.clinicavet.clinica_api.dto.ServicoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.ServicoResponseDTO;

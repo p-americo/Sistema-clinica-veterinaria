@@ -1,6 +1,5 @@
 package br.com.clinicavet.clinica_api.dto;
 
-import br.com.clinicavet.clinica_api.model.ECliente;
 import br.com.clinicavet.clinica_api.model.enums.EspecieAnimal;
 import br.com.clinicavet.clinica_api.model.enums.PorteAnimal;
 import br.com.clinicavet.clinica_api.model.enums.SexoAnimal;

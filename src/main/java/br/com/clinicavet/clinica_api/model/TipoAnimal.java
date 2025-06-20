@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 
-public class EAnimal {
+public class TipoAnimal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +58,6 @@ public class EAnimal {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
-    private ECliente cliente;
+    private TipoCliente cliente;
 
 }

@@ -14,13 +14,13 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class CargoService {
+public class CargoServiceImplement {
 
     private final CargoRepository cargoRepository;
     private final FuncionarioRepository funcionarioRepository;
     private final ModelMapper modelMapper;
 
-    public CargoService(CargoRepository cargoRepository, FuncionarioRepository funcionarioRepository, ModelMapper modelMapper) {
+    public CargoServiceImplement(CargoRepository cargoRepository, FuncionarioRepository funcionarioRepository, ModelMapper modelMapper) {
         this.cargoRepository = cargoRepository;
         this.funcionarioRepository = funcionarioRepository;
         this.modelMapper = modelMapper;

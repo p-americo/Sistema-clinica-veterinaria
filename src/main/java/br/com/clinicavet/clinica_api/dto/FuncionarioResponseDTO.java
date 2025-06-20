@@ -8,12 +8,20 @@ import java.time.LocalDate;
 @Setter
 public class FuncionarioResponseDTO {
     private Long id;
+
     private String nome;
+
     private String cpf;
+
     private LocalDate dataNascimento;
+
     private String telefone;
+
     private String email;
+
     private LocalDate dataAdmissao;
+
     private String crmv;
-    private CargoResponseDTO cargo; // << DTO aninhado para os detalhes do cargo
+
+    private CargoResponseDTO cargo;
 }
