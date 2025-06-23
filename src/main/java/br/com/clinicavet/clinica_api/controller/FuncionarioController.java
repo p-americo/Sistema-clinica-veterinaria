@@ -31,7 +31,7 @@ public class FuncionarioController {
 
     @GetMapping
     public ResponseEntity<List<FuncionarioResponseDTO>> listarFuncionarios() {
-        return ResponseEntity.ok(funcionarioServiceImplement.listarTodos());
+        return ResponseEntity.ok(funcionarioServiceImplement.buscarTodos());
     }
 
     @GetMapping("/{id}")

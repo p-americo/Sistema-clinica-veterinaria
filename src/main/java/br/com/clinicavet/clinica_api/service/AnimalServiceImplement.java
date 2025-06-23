@@ -7,6 +7,7 @@ import br.com.clinicavet.clinica_api.model.TipoAnimal;
 import br.com.clinicavet.clinica_api.model.TipoCliente;
 import br.com.clinicavet.clinica_api.repository.AnimalRepository;
 import br.com.clinicavet.clinica_api.repository.ClienteRepository;
+import br.com.clinicavet.clinica_api.service.Interface.AnimalService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class AnimalServiceImplement {
+public class AnimalServiceImplement implements AnimalService {
 
     private final AnimalRepository animalRepository;
     private final ModelMapper modelMapper;
@@ -55,6 +56,11 @@ public class AnimalServiceImplement {
         return mapEntidadeParaResponse(animal);
     }
 
+    @Override
+    public List<AnimalResponseDTO> listarTodos() {
+        return List.of();
+    }
+
     @Transactional
     public List<AnimalResponseDTO> buscarTodosAnimais() {
         return animalRepository.findAll().stream()
@@ -82,6 +88,19 @@ public class AnimalServiceImplement {
         TipoAnimal animalAtualizado = animalRepository.save(animalExistente);
         return mapEntidadeParaResponse(animalAtualizado);
     }
+
+    @Override
+    public void deletarAnimal(Long id) {
+
+        animalRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + id));
+        animalRepository.deleteById(id);
+    }
+
+    @Override
+    public AnimalResponseDTO buscarPorId(Long id) {
+        return null;
+    }
+
 
     @Transactional
     public void deletarAnimal(long animalId) {

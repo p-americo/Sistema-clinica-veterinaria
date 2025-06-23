@@ -8,6 +8,7 @@ import br.com.clinicavet.clinica_api.model.TipoFuncionario;
 import br.com.clinicavet.clinica_api.repository.CargoRepository;
 import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
 import br.com.clinicavet.clinica_api.repository.ServicoRepository;
+import br.com.clinicavet.clinica_api.service.Interface.FuncionarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class FuncionarioServiceImplement {
+public class FuncionarioServiceImplement implements FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
     private final CargoRepository cargoRepository;
@@ -65,7 +66,7 @@ public class FuncionarioServiceImplement {
     }
 
     @Transactional(readOnly = true)
-    public List<FuncionarioResponseDTO> listarTodos() {
+    public List<FuncionarioResponseDTO> buscarTodos() {
         return funcionarioRepository.findAll()
                 .stream()
                 .map(func -> modelMapper.map(func, FuncionarioResponseDTO.class))

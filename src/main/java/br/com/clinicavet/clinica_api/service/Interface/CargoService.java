@@ -11,11 +11,11 @@ public interface CargoService {
 
     CargoResponseDTO buscarPorId(Long id);
 
-    List<CargoResponseDTO> lsitarTodos();
+    List<CargoResponseDTO> listarTodos();
 
     CargoResponseDTO atualizarCargo (Long id, CargoRequestDTO cargo);
 
-    CargoResponseDTO deletarCargo(Long id);
+    void deletarCargo(Long id);
 
 
 }

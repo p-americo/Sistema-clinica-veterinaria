@@ -13,28 +13,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/servicos")
 public class ServicoController {
 
     private final ServicoServiceImplement service;
+    private final ServicoServiceImplement servicoServiceImplement;
 
     @Autowired
-    public ServicoController(ServicoServiceImplement service) {
+    public ServicoController(ServicoServiceImplement service, ServicoServiceImplement servicoServiceImplement) {
         this.service = service;
+        this.servicoServiceImplement = servicoServiceImplement;
     }
 
     @GetMapping
-    public ResponseEntity<Page<ServicoResponseDTO>> listarServicos(@PageableDefault(size = 10, sort = "tipo") Pageable paginacao) {
-        Page<ServicoResponseDTO> paginaDeServicos = service.obterTodosServicos(paginacao);
-        return ResponseEntity.ok(paginaDeServicos);
+    public ResponseEntity<List<ServicoResponseDTO>> listarServicos() {
+        return ResponseEntity.ok(servicoServiceImplement.buscarTodos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ServicoResponseDTO> detalharServico(@PathVariable @NotNull Long id) {
         // Usando o tipo de DTO correto (Response)
-        ServicoResponseDTO dto = service.obterServicoPorId(id);
+        ServicoResponseDTO dto = service.buscarPorId(id);
         return ResponseEntity.ok(dto);
     }
 

@@ -1,9 +1,13 @@
 package br.com.clinicavet.clinica_api.service;
 
+import br.com.clinicavet.clinica_api.Execeptions.DataIntegrityViolationException;
 import br.com.clinicavet.clinica_api.dto.ClienteRequestDTO;
 import br.com.clinicavet.clinica_api.dto.ClienteResponseDTO;
+import br.com.clinicavet.clinica_api.dto.ClienteUpdateDTO;
 import br.com.clinicavet.clinica_api.model.TipoCliente;
 import br.com.clinicavet.clinica_api.repository.ClienteRepository;
+import br.com.clinicavet.clinica_api.repository.PessoaRepository;
+import br.com.clinicavet.clinica_api.service.Interface.ClienteService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,33 +17,41 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class ClienteServiceImplement {
+public class ClienteServiceImplement implements ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final ModelMapper modelMapper;
+    private final PessoaRepository pessoaRepository;
 
 
-    public ClienteServiceImplement(ClienteRepository clienteRepository, ModelMapper modelMapper) {
+    public ClienteServiceImplement(ClienteRepository clienteRepository, ModelMapper modelMapper, PessoaRepository pessoaRepository) {
         this.clienteRepository = clienteRepository;
         this.modelMapper = modelMapper;
+        this.pessoaRepository = pessoaRepository;
     }
 
     @Transactional
     public ClienteResponseDTO criarCliente(ClienteRequestDTO clienteRequestDTO) {
+        // validação de cpf
+        if (pessoaRepository.existsByCpf(clienteRequestDTO.getCpf())) {
+            throw new DataIntegrityViolationException("CPF já cadastrado no sistema.");
+        }
+
         TipoCliente cliente = modelMapper.map(clienteRequestDTO, TipoCliente.class);
         TipoCliente clienteSalvo = clienteRepository.save(cliente);
         return modelMapper.map(clienteSalvo, ClienteResponseDTO.class);
     }
 
+
     @Transactional(readOnly = true)
-    public ClienteResponseDTO buscarClientePorId(Long id) {
+    public ClienteResponseDTO buscarPorId(Long id) {
         TipoCliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID: " + id));
         return modelMapper.map(cliente, ClienteResponseDTO.class);
     }
 
     @Transactional(readOnly = true)
-    public List<ClienteResponseDTO> listarTodosClientes() {
+    public List<ClienteResponseDTO> listarTodos() {
         List<TipoCliente> clientes = clienteRepository.findAll();
         return clientes.stream()
                 .map(cliente -> modelMapper.map(cliente, ClienteResponseDTO.class))
@@ -47,7 +59,7 @@ public class ClienteServiceImplement {
     }
 
     @Transactional
-    public ClienteResponseDTO atualizarCliente(Long id, ClienteRequestDTO clienteRequestDTO) {
+    public ClienteResponseDTO atualizarCliente(Long id, ClienteUpdateDTO clienteRequestDTO) {
         TipoCliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado para atualização com o ID: " + id));
 
@@ -66,13 +78,4 @@ public class ClienteServiceImplement {
         clienteRepository.deleteById(id);
     }
 
-    @Transactional
-    public ClienteResponseDTO removerCliente(Long cliente_id) {
-        // Correção aqui
-        TipoCliente clienteRemovido = clienteRepository.findById(cliente_id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID " + cliente_id));
-
-        clienteRepository.delete(clienteRemovido);
-
-        return modelMapper.map(clienteRemovido, ClienteResponseDTO.class);
     }
-}

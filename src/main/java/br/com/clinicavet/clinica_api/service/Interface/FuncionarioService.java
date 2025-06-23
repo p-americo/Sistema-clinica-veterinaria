@@ -16,5 +16,5 @@ public interface FuncionarioService {
 
     List<FuncionarioResponseDTO> buscarTodos();
 
-    FuncionarioResponseDTO deletarFuncionario(Long id);
+    void deletarFuncionario(Long id);
 }

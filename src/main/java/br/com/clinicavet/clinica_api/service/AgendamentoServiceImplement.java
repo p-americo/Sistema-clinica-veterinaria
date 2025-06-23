@@ -144,7 +144,7 @@ public class AgendamentoServiceImplement implements AgendamentoService {
 
     public void deletarAgendamento(Long id) {
 
-        TipoAgendamento deletarAgendameto =  agendamentoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
+        agendamentoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
 
         agendamentoRepository.deleteById(id);
     }

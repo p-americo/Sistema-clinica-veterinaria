@@ -5,6 +5,7 @@ import br.com.clinicavet.clinica_api.dto.CargoResponseDTO;
 import br.com.clinicavet.clinica_api.model.TipoCargo;
 import br.com.clinicavet.clinica_api.repository.CargoRepository;
 import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
+import br.com.clinicavet.clinica_api.service.Interface.CargoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class CargoServiceImplement {
+public class CargoServiceImplement implements CargoService {
 
     private final CargoRepository cargoRepository;
     private final FuncionarioRepository funcionarioRepository;

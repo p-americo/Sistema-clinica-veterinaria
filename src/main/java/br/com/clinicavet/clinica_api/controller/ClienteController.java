@@ -2,6 +2,7 @@ package br.com.clinicavet.clinica_api.controller;
 
 import br.com.clinicavet.clinica_api.dto.ClienteRequestDTO;
 import br.com.clinicavet.clinica_api.dto.ClienteResponseDTO;
+import br.com.clinicavet.clinica_api.dto.ClienteUpdateDTO;
 import br.com.clinicavet.clinica_api.service.ClienteServiceImplement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +33,19 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> listarTodosClientes() {
-        List<ClienteResponseDTO> listaClientes = clienteServiceImplement.listarTodosClientes();
+        List<ClienteResponseDTO> listaClientes = clienteServiceImplement.listarTodos();
         return ResponseEntity.ok(listaClientes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> buscarClientePorId(@PathVariable Long id) {
-        ClienteResponseDTO responseDTO = clienteServiceImplement.buscarClientePorId(id);
+        ClienteResponseDTO responseDTO = clienteServiceImplement.buscarPorId(id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteRequestDTO) {
-        ClienteResponseDTO responseDTO = clienteServiceImplement.atualizarCliente(id, clienteRequestDTO);
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteUpdateDTO UpdateRequestDTO) {
+        ClienteResponseDTO responseDTO = clienteServiceImplement.atualizarCliente(id, UpdateRequestDTO);
         return ResponseEntity.ok(responseDTO);
     }
 

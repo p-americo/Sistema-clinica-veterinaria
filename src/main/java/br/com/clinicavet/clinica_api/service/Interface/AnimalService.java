@@ -12,7 +12,7 @@ public interface AnimalService {
 
     AnimalResponseDTO atualizarAnimal(Long id, AnimalUpdateDTO animalUpdateDTO);
 
-    AnimalResponseDTO deletarAnimal(Long id);
+    void deletarAnimal(Long id);
 
     AnimalResponseDTO buscarPorId(Long id);
 
