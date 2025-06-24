@@ -1,6 +1,6 @@
 package br.com.clinicavet.clinica_api.dto;
 
-import br.com.clinicavet.clinica_api.model.enums.TipoServico;
+import br.com.clinicavet.clinica_api.model.enums.EnumServico;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ public class ServicoResponseDTO {
 
     private Long id;
 
-    private TipoServico tipo;
+    private EnumServico tipo;
 
     private BigDecimal valor;
 

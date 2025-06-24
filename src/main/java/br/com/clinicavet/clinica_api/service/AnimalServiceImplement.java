@@ -1,5 +1,6 @@
 package br.com.clinicavet.clinica_api.service;
 
+import br.com.clinicavet.clinica_api.Execeptions.DataIntegrityViolationException;
 import br.com.clinicavet.clinica_api.dto.AnimalRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AnimalResponseDTO;
 import br.com.clinicavet.clinica_api.dto.AnimalUpdateDTO;
@@ -38,6 +39,9 @@ public class AnimalServiceImplement implements AnimalService {
         TipoCliente cliente = clienteRepository.findById(animalDTO.getClienteId())
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com o ID: " + animalDTO.getClienteId()));
 
+        if (animalRepository.existsByNome(animalDTO.getNome()) && animalRepository.existsByClienteId(animalDTO.getClienteId())) {
+            throw new DataIntegrityViolationException("Animal ja cadastrado no mesmo cliente");
+        }
         TipoAnimal novoAnimal = modelMapper.map(animalDTO, TipoAnimal.class);
 
         novoAnimal.setId(null);
@@ -68,11 +72,13 @@ public class AnimalServiceImplement implements AnimalService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     public AnimalResponseDTO atualizarAnimal(Long animalId, AnimalUpdateDTO animalDTO) {
         TipoAnimal animalExistente = animalRepository.findById(animalId)
                 .orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + animalId));
 
+        if (animalRepository.existsByNome(animalDTO.getNome()) && animalRepository.existsByClienteId(animalDTO.getClienteId())) {
+            throw new DataIntegrityViolationException("Animal ja cadastrado no mesmo cliente");
+        }
         modelMapper.map(animalDTO, animalExistente);
 
         if (animalDTO.getClienteId() != null) {

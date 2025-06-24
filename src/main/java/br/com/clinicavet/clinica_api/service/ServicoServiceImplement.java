@@ -1,22 +1,18 @@
 package br.com.clinicavet.clinica_api.service;
 
-import br.com.clinicavet.clinica_api.dto.FuncionarioResponseDTO;
 import br.com.clinicavet.clinica_api.dto.ServicoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.ServicoResponseDTO;
 import br.com.clinicavet.clinica_api.model.TipoFuncionario;
 import br.com.clinicavet.clinica_api.model.TipoServico;
-import br.com.clinicavet.clinica_api.model.enums.TipoCargo;
+import br.com.clinicavet.clinica_api.model.enums.EnumCargo;
 import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
 import br.com.clinicavet.clinica_api.repository.ServicoRepository;
 import br.com.clinicavet.clinica_api.service.Interface.ServicoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,20 +45,26 @@ public class ServicoServiceImplement implements ServicoService {
         return mapEntidadeParaResponseDTO(servico);
     }
 
+    // Dentro da classe de serviço para Servico
+
     @Transactional
     public ServicoResponseDTO cadastrarServico(ServicoRequestDTO dto) {
-
         TipoFuncionario veterinario = funcionarioRepository.findById(dto.getVeterinarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Veterinário não encontrado com o ID: " + dto.getVeterinarioId()));
 
-        if (veterinario.getCargo() == null || veterinario.getCargo().getCargo() != TipoCargo.VETERINARIO) {
+        if (veterinario.getCargo() == null || veterinario.getCargo().getCargo() != EnumCargo.VETERINARIO) {
             throw new IllegalArgumentException("O funcionário com ID " + veterinario.getId() + " não é um veterinário.");
         }
 
         TipoServico novoServico = modelMapper.map(dto, TipoServico.class);
-        novoServico.setVeterinario(veterinario); // Associa a entidade completa
+
+        // Garantia explícita de que é um novo registro
+        novoServico.setId(null);
+
+        novoServico.setVeterinario(veterinario);
 
         TipoServico servicoSalvo = servicoRepository.save(novoServico);
+
         return mapEntidadeParaResponseDTO(servicoSalvo);
     }
 
@@ -75,7 +77,7 @@ public class ServicoServiceImplement implements ServicoService {
                 .orElseThrow(() -> new EntityNotFoundException("Veterinário não encontrado com o ID: " + dto.getVeterinarioId()));
 
         // Valida se o funcionário informado é um veterinário
-        if (veterinario.getCargo() == null || veterinario.getCargo().getCargo() != TipoCargo.VETERINARIO) {
+        if (veterinario.getCargo() == null || veterinario.getCargo().getCargo() != EnumCargo.VETERINARIO) {
             throw new IllegalArgumentException("O funcionário com ID " + veterinario.getId() + " não é um veterinário.");
         }
 

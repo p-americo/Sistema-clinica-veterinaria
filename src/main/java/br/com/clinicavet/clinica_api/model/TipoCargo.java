@@ -1,5 +1,6 @@
 package br.com.clinicavet.clinica_api.model;
 
+import br.com.clinicavet.clinica_api.model.enums.EnumCargo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class TipoCargo {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private br.com.clinicavet.clinica_api.model.enums.TipoCargo cargo;
+    private EnumCargo cargo;
 
     @Column(nullable = false, precision = 10, scale = 2) // Definindo precisão para o banco
     private BigDecimal salario;

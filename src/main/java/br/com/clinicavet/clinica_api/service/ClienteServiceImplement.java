@@ -37,6 +37,11 @@ public class ClienteServiceImplement implements ClienteService {
             throw new DataIntegrityViolationException("CPF já cadastrado no sistema.");
         }
 
+        // Validação do email
+        if(pessoaRepository.existsByEmail(clienteRequestDTO.getEmail())) {
+            throw new DataIntegrityViolationException("Email já cadastrado no sistema");
+        }
+
         TipoCliente cliente = modelMapper.map(clienteRequestDTO, TipoCliente.class);
         TipoCliente clienteSalvo = clienteRepository.save(cliente);
         return modelMapper.map(clienteSalvo, ClienteResponseDTO.class);
@@ -62,6 +67,13 @@ public class ClienteServiceImplement implements ClienteService {
     public ClienteResponseDTO atualizarCliente(Long id, ClienteUpdateDTO clienteRequestDTO) {
         TipoCliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado para atualização com o ID: " + id));
+
+        if (pessoaRepository.existsByCpf(clienteRequestDTO.getCpf())) {
+            throw new DataIntegrityViolationException("CPF já cadastrado no sistema.");
+        }
+        if(pessoaRepository.existsByEmail(clienteRequestDTO.getEmail())) {
+            throw new DataIntegrityViolationException("Email já cadastrado no sistema");
+        }
 
         modelMapper.map(clienteRequestDTO, clienteExistente);
 

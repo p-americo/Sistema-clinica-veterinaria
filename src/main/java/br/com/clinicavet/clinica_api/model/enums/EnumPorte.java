@@ -1,6 +1,6 @@
 package br.com.clinicavet.clinica_api.model.enums;
 
-public enum PorteAnimal {
+public enum EnumPorte {
 
     PEQUENO,
     MEDIO,

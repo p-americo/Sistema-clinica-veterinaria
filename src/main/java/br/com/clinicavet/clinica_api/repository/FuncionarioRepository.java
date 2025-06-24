@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FuncionarioRepository extends JpaRepository <TipoFuncionario, Long>{
 
     boolean existsByCargoId(Long cargoId);
+    boolean existsByCrmv(String crmv);
 
 }

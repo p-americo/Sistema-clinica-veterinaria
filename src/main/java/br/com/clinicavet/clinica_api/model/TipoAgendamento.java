@@ -1,6 +1,6 @@
 package br.com.clinicavet.clinica_api.model;
 
-import br.com.clinicavet.clinica_api.model.enums.StatusAgendamento; // << CRIAR ESTE ENUM
+import br.com.clinicavet.clinica_api.model.enums.EnumAgendamento; // << CRIAR ESTE ENUM
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ public class TipoAgendamento {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusAgendamento status = StatusAgendamento.AGENDADO;
+    private EnumAgendamento status = EnumAgendamento.AGENDADO;
 
     @Column(length = 255)
     private String observacoes;

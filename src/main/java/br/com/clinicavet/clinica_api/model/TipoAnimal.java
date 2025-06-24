@@ -1,8 +1,8 @@
 package br.com.clinicavet.clinica_api.model;
 
-import br.com.clinicavet.clinica_api.model.enums.PorteAnimal;
-import br.com.clinicavet.clinica_api.model.enums.EspecieAnimal;
-import br.com.clinicavet.clinica_api.model.enums.SexoAnimal;
+import br.com.clinicavet.clinica_api.model.enums.EnumPorte;
+import br.com.clinicavet.clinica_api.model.enums.EnumEspecie;
+import br.com.clinicavet.clinica_api.model.enums.EnumSexo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,18 +28,18 @@ public class TipoAnimal {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "especie", nullable = false)
-    private EspecieAnimal especie;
+    private EnumEspecie especie;
 
    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PorteAnimal porte;
+    private EnumPorte porte;
 
     @Column(length = 50, nullable = false)
     private String raca;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SexoAnimal sexo;
+    private EnumSexo sexo;
 
     @Column(length = 15)
     private String cor;

@@ -1,6 +1,6 @@
 package br.com.clinicavet.clinica_api.dto;
 
-import br.com.clinicavet.clinica_api.model.enums.StatusAgendamento;
+import br.com.clinicavet.clinica_api.model.enums.EnumAgendamento;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +15,6 @@ public class AgendamentoResponseDTO {
     private ServicoResponseDTO servico; // DTO aninhado para detalhes do serviço
     private ClienteResponseDTO cliente; // DTO aninhado para detalhes do cliente
     private LocalDateTime dataHoraAgendamento;
-    private StatusAgendamento status;
+    private EnumAgendamento status;
     private String observacoes;
 }

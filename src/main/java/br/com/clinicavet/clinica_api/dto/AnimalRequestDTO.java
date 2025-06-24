@@ -1,8 +1,8 @@
 package br.com.clinicavet.clinica_api.dto;
 
-import br.com.clinicavet.clinica_api.model.enums.PorteAnimal;
-import br.com.clinicavet.clinica_api.model.enums.EspecieAnimal;
-import br.com.clinicavet.clinica_api.model.enums.SexoAnimal;
+import br.com.clinicavet.clinica_api.model.enums.EnumPorte;
+import br.com.clinicavet.clinica_api.model.enums.EnumEspecie;
+import br.com.clinicavet.clinica_api.model.enums.EnumSexo;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,17 +27,17 @@ public class AnimalRequestDTO {
     private String nome;
 
     @NotNull(message = "A espécie do animal é obrigatória.")
-    private EspecieAnimal especie;
+    private EnumEspecie especie;
 
     @NotNull(message = "O porte do animal é obrigatório.")
-    private PorteAnimal porte;
+    private EnumPorte porte;
 
     @NotBlank(message = "A raça do animal é obrigatória.")
     @Size(max = 50, message = "A raça deve ter no máximo 100 caracteres.")
     private String raca;
 
     @NotNull(message = "O sexo do animal é obrigatório.")
-    private SexoAnimal sexo;
+    private EnumSexo sexo;
 
     @Size(max = 15, message = "A cor deve ter no máximo 50 caracteres.")
     private String cor;

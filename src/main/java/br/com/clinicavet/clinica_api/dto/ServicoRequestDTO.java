@@ -1,6 +1,6 @@
 package br.com.clinicavet.clinica_api.dto;
 
-import br.com.clinicavet.clinica_api.model.enums.TipoServico;
+import br.com.clinicavet.clinica_api.model.enums.EnumServico;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 public class ServicoRequestDTO {
 
     @NotNull
-    private TipoServico tipo;
+    private EnumServico tipo;
 
     @NotNull
     private Long veterinarioId;

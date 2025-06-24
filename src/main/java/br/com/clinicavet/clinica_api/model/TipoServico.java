@@ -1,5 +1,6 @@
 package br.com.clinicavet.clinica_api.model;
 
+import br.com.clinicavet.clinica_api.model.enums.EnumServico;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class TipoServico {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private br.com.clinicavet.clinica_api.model.enums.TipoServico tipo;
+    private EnumServico tipo;
 
     @ManyToOne
     @JoinColumn(name = "veterinario_id", nullable = false)

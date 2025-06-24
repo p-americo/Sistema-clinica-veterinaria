@@ -5,7 +5,7 @@ import br.com.clinicavet.clinica_api.dto.AgendamentoRequestDTO;
 import br.com.clinicavet.clinica_api.dto.AgendamentoResponseDTO;
 import br.com.clinicavet.clinica_api.dto.AgendamentoUpdateDTO;
 import br.com.clinicavet.clinica_api.model.*; // EAnimal, ECliente, EServico, EAgendamento
-import br.com.clinicavet.clinica_api.model.enums.StatusAgendamento; // Importe seu Enum de Status
+import br.com.clinicavet.clinica_api.model.enums.EnumAgendamento; // Importe seu Enum de Status
 import br.com.clinicavet.clinica_api.repository.*; // Todos os repositórios
 import br.com.clinicavet.clinica_api.service.Interface.AgendamentoService;
 import org.modelmapper.ModelMapper;
@@ -74,11 +74,11 @@ public class AgendamentoServiceImplement implements AgendamentoService {
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
 
         // Lógica de negócio: talvez você não possa cancelar um agendamento que já foi realizado.
-        if (agendamento.getStatus() == StatusAgendamento.REALIZADO) {
+        if (agendamento.getStatus() == EnumAgendamento.REALIZADO) {
             throw new IllegalStateException("Não é possível cancelar um agendamento já realizado.");
         }
 
-        agendamento.setStatus(StatusAgendamento.CANCELADO);
+        agendamento.setStatus(EnumAgendamento.CANCELADO);
         agendamentoRepository.save(agendamento);
         return modelMapper.map(agendamento, AgendamentoResponseDTO.class);
     }
@@ -104,11 +104,11 @@ public class AgendamentoServiceImplement implements AgendamentoService {
         TipoAgendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
 
-        if (agendamento.getStatus() != StatusAgendamento.AGENDADO) {
+        if (agendamento.getStatus() != EnumAgendamento.AGENDADO) {
             throw new IllegalStateException("Apenas agendamentos com status AGENDADO podem ser confirmados.");
         }
 
-        agendamento.setStatus(StatusAgendamento.CONFIRMADO);
+        agendamento.setStatus(EnumAgendamento.CONFIRMADO);
 
         agendamentoRepository.save(agendamento);
 
@@ -121,8 +121,8 @@ public class AgendamentoServiceImplement implements AgendamentoService {
         TipoAgendamento agendamentoExistente = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado para atualização com o ID: " + id));
 
-        if (agendamentoExistente.getStatus() == StatusAgendamento.CANCELADO ||
-                agendamentoExistente.getStatus() == StatusAgendamento.REALIZADO) {
+        if (agendamentoExistente.getStatus() == EnumAgendamento.CANCELADO ||
+                agendamentoExistente.getStatus() == EnumAgendamento.REALIZADO) {
             throw new IllegalStateException("Não é possível alterar um agendamento com status " + agendamentoExistente.getStatus());
         }
 
@@ -137,7 +137,7 @@ public class AgendamentoServiceImplement implements AgendamentoService {
 
         TipoAgendamento realizarAgendamento = agendamentoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
 
-        realizarAgendamento.setStatus(StatusAgendamento.REALIZADO);
+        realizarAgendamento.setStatus(EnumAgendamento.REALIZADO);
         agendamentoRepository.save(realizarAgendamento);
         return modelMapper.map(realizarAgendamento, AgendamentoResponseDTO.class);
     }

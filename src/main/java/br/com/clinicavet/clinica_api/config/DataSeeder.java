@@ -1,6 +1,7 @@
 package br.com.clinicavet.clinica_api.config;
 
 import br.com.clinicavet.clinica_api.model.TipoCargo;
+import br.com.clinicavet.clinica_api.model.enums.EnumCargo;
 import br.com.clinicavet.clinica_api.repository.CargoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,11 @@ public class DataSeeder implements CommandLineRunner {
         if (cargoRepository.count() == 0) {
             System.out.println("Populando cargos iniciais...");
             TipoCargo vet = new TipoCargo();
-            vet.setCargo(br.com.clinicavet.clinica_api.model.enums.TipoCargo.VETERINARIO);
+            vet.setCargo(EnumCargo.VETERINARIO);
             vet.setSalario(new BigDecimal("8000.00"));
 
             TipoCargo rec = new TipoCargo();
-            rec.setCargo(br.com.clinicavet.clinica_api.model.enums.TipoCargo.RECEPCIONISTA);
+            rec.setCargo(EnumCargo.RECEPCIONISTA);
             rec.setSalario(new BigDecimal("2500.00"));
 
             cargoRepository.saveAll(List.of(vet, rec));

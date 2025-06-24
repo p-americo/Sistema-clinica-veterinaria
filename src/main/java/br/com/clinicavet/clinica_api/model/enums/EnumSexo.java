@@ -1,5 +1,5 @@
 package br.com.clinicavet.clinica_api.model.enums;
 
-public enum SexoAnimal {
+public enum EnumSexo {
     MACHO, FEMEA
 }

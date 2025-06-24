@@ -8,4 +8,5 @@ public interface PessoaRepository extends JpaRepository<TipoPessoa, Long> {
     // Verifica se cpf já é existente
 
     boolean existsByCpf(String cpf);
+    boolean existsByEmail(String email);
 }

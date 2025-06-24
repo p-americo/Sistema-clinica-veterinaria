@@ -1,8 +1,8 @@
 package br.com.clinicavet.clinica_api.dto;
 
-import br.com.clinicavet.clinica_api.model.enums.EspecieAnimal;
-import br.com.clinicavet.clinica_api.model.enums.PorteAnimal;
-import br.com.clinicavet.clinica_api.model.enums.SexoAnimal;
+import br.com.clinicavet.clinica_api.model.enums.EnumEspecie;
+import br.com.clinicavet.clinica_api.model.enums.EnumPorte;
+import br.com.clinicavet.clinica_api.model.enums.EnumSexo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +19,13 @@ public class AnimalResponseDTO {
 
     private String nome;
 
-    private EspecieAnimal especie;
+    private EnumEspecie especie;
 
-    private PorteAnimal porte;
+    private EnumPorte porte;
 
     private String raca;
 
-    private SexoAnimal sexo;
+    private EnumSexo sexo;
 
     private String cor;
 
