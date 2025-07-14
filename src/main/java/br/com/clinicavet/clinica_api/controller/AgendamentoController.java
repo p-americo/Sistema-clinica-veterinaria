@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/agendamentos")
 public class AgendamentoController {
 
+
     private final AgendamentoServiceImplement agendamentoServiceImplement;
 
     @Autowired
@@ -62,5 +63,11 @@ public class AgendamentoController {
     public ResponseEntity<AgendamentoResponseDTO> atualizarAgendamento(@PathVariable Long id, @RequestBody @Valid AgendamentoUpdateDTO updateDTO) {
         AgendamentoResponseDTO responseDTO = agendamentoServiceImplement.atualizarAgendamento(id, updateDTO);
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAgendamento(@PathVariable Long id) {
+        agendamentoServiceImplement.deletarAgendamento(id);
+        return ResponseEntity.noContent().build();
     }
 }

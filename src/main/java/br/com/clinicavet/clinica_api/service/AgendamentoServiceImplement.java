@@ -142,10 +142,10 @@ public class AgendamentoServiceImplement implements AgendamentoService {
         return modelMapper.map(realizarAgendamento, AgendamentoResponseDTO.class);
     }
 
+    @Transactional
     public void deletarAgendamento(Long id) {
-
-        agendamentoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
-
-        agendamentoRepository.deleteById(id);
+        TipoAgendamento agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Agendamento não encontrado com o ID: " + id));
+        agendamentoRepository.delete(agendamento);
     }
 }

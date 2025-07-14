@@ -45,16 +45,19 @@ public class TipoAnimal {
     private String cor;
 
     @Column(nullable = false)
-    private double peso;
+    private Double peso;
 
     @Column(nullable = false)
-    private boolean castrado;
+    private Boolean castrado;
 
     @Column(name = "data_nascimento",  nullable = false)
     private LocalDate dataNascimento;
 
     @Column(length = 255)
     private String observacao;
+
+    @OneToOne(mappedBy = "animal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TipoProntuario prontuario;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
