@@ -7,4 +7,8 @@ import org.springframework.stereotype.Service;
 public class ProntuarioService {
 
     private final MedicamentoService medicamentoService;
+    
+    public ProntuarioService(MedicamentoService medicamentoService) {
+        this.medicamentoService = medicamentoService;
+    }
 }
