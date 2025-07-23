@@ -11,10 +11,15 @@ import java.time.LocalDateTime;
 public class AgendamentoResponseDTO {
 
     private Long id;
-    private AnimalResponseDTO animal; // DTO aninhado para mostrar detalhes do animal
-    private ServicoResponseDTO servico; // DTO aninhado para detalhes do serviço
-    private ClienteResponseDTO cliente; // DTO aninhado para detalhes do cliente
+    private AnimalResponseDTO animal;
+
+    private ServicoResponseDTO servico;
+
+    private ClienteResponseDTO cliente;
+
     private LocalDateTime dataHoraAgendamento;
+
     private EnumAgendamento status;
+
     private String observacoes;
 }

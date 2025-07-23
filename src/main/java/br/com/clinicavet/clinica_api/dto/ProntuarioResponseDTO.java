@@ -14,9 +14,14 @@ import java.util.List;
 public class ProntuarioResponseDTO {
     
     private Long id;
+
     private Long animalId;
+
     private String nomeAnimal;
+
     private String alergiasConhecidas;
+
     private String condicoesPreexistentes;
+
     private List<RegistroProntuarioResponseDTO> registros;
 }

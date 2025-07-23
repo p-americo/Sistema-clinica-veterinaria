@@ -9,9 +9,12 @@ import lombok.Setter;
 public class ProdutoResponseDTO {
 
     private Long id;
+
     private String nome;
+
     private String descricao;
-    private String fabricante;
+
     private EnumTipoProduto tipoProduto;
+
     private String unidadeMedida;
 }

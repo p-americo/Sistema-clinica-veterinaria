@@ -16,14 +16,24 @@ import java.util.List;
 public class RegistroProntuarioResponseDTO {
     
     private Long id;
+
     private Long prontuarioId;
+
     private Long agendamentoId;
+
     private Long veterinarioResponsavelId;
+
     private String nomeVeterinario;
+
     private LocalDateTime dataHora;
+
     private Long internacaoId;
+
     private BigDecimal pesoNoDia;
+
     private String observacoesClinicas;
+
     private String diagnostico;
+
     private List<AdministracaoMedicamentoResponseDTO> medicamentosAdministrados;
 }

@@ -20,8 +20,6 @@ import java.time.LocalDate;
 public class AnimalRequestDTO {
 
 
-    // ID não é incluído aqui, pois é para criação
-
     @NotBlank(message = "O nome do animal é obrigatório.")
     @Size(max = 50, message = "O nome do animal deve ter no máximo 50 caracteres.") // Ajuste o max se necessário
     private String nome;

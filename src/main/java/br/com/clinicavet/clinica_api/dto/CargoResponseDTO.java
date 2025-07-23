@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 public class CargoResponseDTO {
 
     private Long id;
+
     private EnumCargo cargo;
+
     private BigDecimal salario;
+
 }

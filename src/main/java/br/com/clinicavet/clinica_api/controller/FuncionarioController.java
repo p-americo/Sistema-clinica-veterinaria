@@ -39,8 +39,6 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarioServiceImplement.buscarPorId(id));
     }
 
-    // Dentro da classe FuncionarioController
-
     @PutMapping("/{id}")
     public ResponseEntity<FuncionarioResponseDTO> atualizarFuncionario(@PathVariable Long id, @RequestBody @Valid FuncionarioUpdateDTO requestDTO) {
         FuncionarioResponseDTO responseDTO = funcionarioServiceImplement.atualizarFuncionario(id, requestDTO);

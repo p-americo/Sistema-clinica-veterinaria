@@ -11,21 +11,18 @@ import java.time.LocalDateTime;
 @Table(name = "administracoes_medicamentos")
 @Getter
 @Setter
-
 public class TipoAdministracaoMedicamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // CORRETO: Referência à entidade EMedicamento (o produto em si)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicamento_id", nullable = false)
     private TipoMedicamento medicamento;
 
-    // Relacionamento com a "folha de anotações" onde este ato foi registrado
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "entrada_prontuario_id", nullable = false)
+    @JoinColumn(name = "entrada_prontuario_id")
     private TipoRegistroProntuario entradaProntuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,6 +35,12 @@ public class TipoAdministracaoMedicamento {
     @Column(nullable = false)
     private LocalDateTime dataHora;
 
-    private String dosagem; // A dosagem pode ser registrada aqui (ex: "5mg/ml")
+    private String dosagem;
 
+    // CAMPO ADICIONADO PARA CORRIGIR O ERRO
+    // Este é o "outro lado" da relação, o dono do mapeamento.
+    // Uma administração de medicamento PODE pertencer a uma diária de internação.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diaria_internacao_id") // Nome da coluna da chave estrangeira no banco
+    private TipoDiariaInternacao diaria;
 }

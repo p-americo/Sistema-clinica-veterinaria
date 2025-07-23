@@ -10,28 +10,26 @@ import lombok.Setter;
 @Table(name = "medicamentos")
 @Getter
 @Setter
-public class TipoMedicamento extends TipoProduto {
+public class TipoMedicamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "produto_id", referencedColumnName = "id", nullable = false)
+    private TipoProduto produto;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "categoria")
+    @Column(nullable = false)
     private EnumCategoriaMedicameno categoria;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "via_administracao")
     private EnumViaMedicamento viaAdministracao;
-    
-    @Column(name = "dosagem_padrao", length = 100)
+
     private String dosagemPadrao;
-    
-    @Column(name = "principio_ativo", length = 200)
+
     private String principioAtivo;
-    
-    @Column(name = "fabricante", length = 100)
-    private String fabricante;
-    
-    @Column(name = "lote", length = 50)
-    private String lote;
-    
-    @Column(name = "prescricao_obrigatoria")
-    private Boolean prescricaoObrigatoria = false;
+
+    private Boolean prescricaoObrigatoria;
 }

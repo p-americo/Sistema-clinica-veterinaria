@@ -14,8 +14,10 @@ public class AgendamentoRequestDTO {
 
         @NotNull
         private Long animalId;
+
         @NotNull
         private Long servicoId;
+
         @NotNull
         private Long clienteId;
 

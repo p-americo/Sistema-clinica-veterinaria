@@ -17,8 +17,11 @@ import java.time.LocalDateTime;
 public class RegistroProntuarioUpdateDTO {
     
     private Long agendamentoId;
+
     private Long veterinarioResponsavelId;
+
     private LocalDateTime dataHora;
+
     private Long internacaoId;
     
     @Positive(message = "O peso deve ser um valor positivo.")

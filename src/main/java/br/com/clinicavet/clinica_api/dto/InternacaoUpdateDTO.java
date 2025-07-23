@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 public class InternacaoUpdateDTO {
     
     private Long veterinarioResponsavelId;
+
     private LocalDateTime dataInicio;
+
     private LocalDateTime dataFim;
     
     @Size(max = 1000, message = "O motivo da internação deve ter no máximo 1000 caracteres.")

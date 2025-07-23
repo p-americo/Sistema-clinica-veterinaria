@@ -4,26 +4,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
-@MappedSuperclass
+@Entity
+@Table(name = "produtos")
 @Getter
 @Setter
-public abstract class TipoProduto {
-    
+public class TipoProduto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, length = 100)
+
+    @Column(nullable = false, length = 100, unique = true)
     private String nome;
-    
+
     @Column(columnDefinition = "TEXT")
     private String descricao;
-    
-    @Column(precision = 10, scale = 2)
-    private BigDecimal preco;
-    
-    @Column
+
+    @Column(nullable = false)
     private Integer quantidadeEstoque;
 }

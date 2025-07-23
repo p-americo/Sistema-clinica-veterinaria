@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.CONFLICT) // 409 Conflict é um bom status para dados duplicados
 public class DataIntegrityViolationException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
     public DataIntegrityViolationException(String message) {
         super(message);
     }

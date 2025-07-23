@@ -26,16 +26,12 @@ public class ProntuarioService implements ProntuarioServiceInterface {
     private final ProntuarioRepository prontuarioRepository;
     private final AnimalRepository animalRepository;
     private final ModelMapper modelMapper;
-    
-    public ProntuarioService(MedicamentoService medicamentoService, 
-                           ProntuarioRepository prontuarioRepository,
-                           AnimalRepository animalRepository,
-                           ModelMapper modelMapper) {
+
+    public ProntuarioService(MedicamentoService medicamentoService, ProntuarioRepository prontuarioRepository, AnimalRepository animalRepository,ModelMapper modelMapper) {
         this.medicamentoService = medicamentoService;
         this.prontuarioRepository = prontuarioRepository;
         this.animalRepository = animalRepository;
         this.modelMapper = modelMapper;
-        this.modelMapper.getConfiguration().setSkipNullEnabled(true);
     }
 
     @Override
@@ -44,18 +40,18 @@ public class ProntuarioService implements ProntuarioServiceInterface {
         // Verificar se o animal existe
         TipoAnimal animal = animalRepository.findById(prontuarioRequestDTO.getAnimalId())
                 .orElseThrow(() -> new NoSuchElementException("Animal não encontrado com o ID: " + prontuarioRequestDTO.getAnimalId()));
-        
+
         // Verificar se já existe prontuário para este animal
         if (prontuarioRepository.existsByAnimalId(prontuarioRequestDTO.getAnimalId())) {
             throw new DataIntegrityViolationException("Já existe um prontuário para este animal");
         }
-        
+
         TipoProntuario novoProntuario = modelMapper.map(prontuarioRequestDTO, TipoProntuario.class);
         novoProntuario.setId(null);
         novoProntuario.setAnimal(animal);
-        
+
         TipoProntuario prontuarioSalvo = prontuarioRepository.save(novoProntuario);
-        
+
         return mapEntidadeParaResponse(prontuarioSalvo);
     }
 
@@ -64,9 +60,9 @@ public class ProntuarioService implements ProntuarioServiceInterface {
     public ProntuarioResponseDTO atualizarProntuario(Long id, ProntuarioUpdateDTO prontuarioUpdateDTO) {
         TipoProntuario prontuarioExistente = prontuarioRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Prontuário não encontrado com o ID: " + id));
-        
+
         modelMapper.map(prontuarioUpdateDTO, prontuarioExistente);
-        
+
         TipoProntuario prontuarioAtualizado = prontuarioRepository.save(prontuarioExistente);
         return mapEntidadeParaResponse(prontuarioAtualizado);
     }
@@ -105,9 +101,9 @@ public class ProntuarioService implements ProntuarioServiceInterface {
     public ProntuarioResponseDTO buscarPorIdComRegistros(Long id) {
         TipoProntuario prontuario = prontuarioRepository.findByIdWithRegistros(id)
                 .orElseThrow(() -> new NoSuchElementException("Prontuário não encontrado com o ID: " + id));
-        
+
         ProntuarioResponseDTO response = mapEntidadeParaResponse(prontuario);
-        
+
         if (prontuario.getRegistros() != null) {
             List<RegistroProntuarioResponseDTO> registros = prontuario.getRegistros().stream()
                     .map(registro -> {
@@ -120,18 +116,18 @@ public class ProntuarioService implements ProntuarioServiceInterface {
                     .collect(Collectors.toList());
             response.setRegistros(registros);
         }
-        
+
         return response;
     }
-    
+
     private ProntuarioResponseDTO mapEntidadeParaResponse(TipoProntuario prontuario) {
         ProntuarioResponseDTO dto = modelMapper.map(prontuario, ProntuarioResponseDTO.class);
-        
+
         if (prontuario.getAnimal() != null) {
             dto.setAnimalId(prontuario.getAnimal().getId());
             dto.setNomeAnimal(prontuario.getAnimal().getNome());
         }
-        
+
         return dto;
     }
 }

@@ -9,6 +9,7 @@ import br.com.clinicavet.clinica_api.model.TipoMedicamento;
 import br.com.clinicavet.clinica_api.model.TipoRegistroProntuario;
 import br.com.clinicavet.clinica_api.repository.AdministracaoMedicamentoRepository;
 import br.com.clinicavet.clinica_api.repository.FuncionarioRepository;
+import br.com.clinicavet.clinica_api.repository.MedicamentoRepository; // <-- MUDANÇA AQUI: Importado
 import br.com.clinicavet.clinica_api.repository.RegistroProntuarioRepository;
 import br.com.clinicavet.clinica_api.service.Interface.AdminstracaoMedicamentoService;
 import jakarta.transaction.Transactional;
@@ -22,72 +23,68 @@ import java.util.stream.Collectors;
 
 @Service
 public class AdministracaoMedicamentoServiceImplement implements AdminstracaoMedicamentoService {
-    
+
     private final AdministracaoMedicamentoRepository administracaoMedicamentoRepository;
     private final RegistroProntuarioRepository registroProntuarioRepository;
     private final FuncionarioRepository funcionarioRepository;
+    private final MedicamentoRepository medicamentoRepository;
     private final ModelMapper modelMapper;
-    
-    public AdministracaoMedicamentoServiceImplement(AdministracaoMedicamentoRepository administracaoMedicamentoRepository,
-                                                  RegistroProntuarioRepository registroProntuarioRepository,
-                                                  FuncionarioRepository funcionarioRepository,
-                                                  ModelMapper modelMapper) {
+
+    public AdministracaoMedicamentoServiceImplement(AdministracaoMedicamentoRepository administracaoMedicamentoRepository, RegistroProntuarioRepository registroProntuarioRepository, FuncionarioRepository funcionarioRepository, MedicamentoRepository medicamentoRepository, ModelMapper modelMapper) {
         this.administracaoMedicamentoRepository = administracaoMedicamentoRepository;
         this.registroProntuarioRepository = registroProntuarioRepository;
         this.funcionarioRepository = funcionarioRepository;
+        this.medicamentoRepository = medicamentoRepository;
         this.modelMapper = modelMapper;
         this.modelMapper.getConfiguration().setSkipNullEnabled(true);
     }
 
     @Override
     @Transactional
-    public AdministracaoMedicamentoResponseDTO criarAdministracao(AdministracaoMedicamentoRequestDTO administracaoRequestDTO) {
-        // Verificar se a entrada do prontuário existe
-        TipoRegistroProntuario entradaProntuario = registroProntuarioRepository.findById(administracaoRequestDTO.getEntradaProntuarioId())
-                .orElseThrow(() -> new NoSuchElementException("Entrada do prontuário não encontrada com o ID: " + administracaoRequestDTO.getEntradaProntuarioId()));
-        
-        // Verificar se o funcionário executor existe
-        TipoFuncionario funcionarioExecutor = funcionarioRepository.findById(administracaoRequestDTO.getFuncionarioExecutorId())
-                .orElseThrow(() -> new NoSuchElementException("Funcionário executor não encontrado com o ID: " + administracaoRequestDTO.getFuncionarioExecutorId()));
-        
-        // Nota: TipoMedicamento será implementado por outra equipe, então por enquanto vamos assumir que existe
-        // Aqui seria necessário buscar o medicamento por ID quando a implementação estiver pronta
-        
-        TipoAdministracaoMedicamento novaAdministracao = modelMapper.map(administracaoRequestDTO, TipoAdministracaoMedicamento.class);
+    public AdministracaoMedicamentoResponseDTO criarAdministracao(AdministracaoMedicamentoRequestDTO dto) {
+
+        TipoRegistroProntuario entradaProntuario = registroProntuarioRepository.findById(dto.getEntradaProntuarioId())
+                .orElseThrow(() -> new NoSuchElementException("Entrada do prontuário não encontrada com o ID: " + dto.getEntradaProntuarioId()));
+
+        TipoFuncionario funcionarioExecutor = funcionarioRepository.findById(dto.getFuncionarioExecutorId())
+                .orElseThrow(() -> new NoSuchElementException("Funcionário executor não encontrado com o ID: " + dto.getFuncionarioExecutorId()));
+
+
+        TipoMedicamento medicamento = medicamentoRepository.findById(dto.getMedicamentoId())
+                .orElseThrow(() -> new NoSuchElementException("Medicamento não encontrado com o ID: " + dto.getMedicamentoId()));
+
+        TipoAdministracaoMedicamento novaAdministracao = modelMapper.map(dto, TipoAdministracaoMedicamento.class);
         novaAdministracao.setId(null);
         novaAdministracao.setEntradaProntuario(entradaProntuario);
         novaAdministracao.setFuncionarioExecutor(funcionarioExecutor);
-        
-        // Por enquanto, vamos criar um medicamento dummy ou deixar null até a implementação da outra equipe
-        // novaAdministracao.setMedicamento(medicamento);
-        
+        novaAdministracao.setMedicamento(medicamento); // <-- MUDANÇA AQUI: Associa o medicamento encontrado
+
         TipoAdministracaoMedicamento administracaoSalva = administracaoMedicamentoRepository.save(novaAdministracao);
-        
+
         return mapEntidadeParaResponse(administracaoSalva);
     }
 
     @Override
     @Transactional
-    public AdministracaoMedicamentoResponseDTO atualizarAdministracao(Long id, AdministracaoMedicamentoUpdateDTO administracaoUpdateDTO) {
+    public AdministracaoMedicamentoResponseDTO atualizarAdministracao(Long id, AdministracaoMedicamentoUpdateDTO dto) {
         TipoAdministracaoMedicamento administracaoExistente = administracaoMedicamentoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Administração de medicamento não encontrada com o ID: " + id));
-        
-        modelMapper.map(administracaoUpdateDTO, administracaoExistente);
-        
-        // Atualizar funcionário executor se fornecido
-        if (administracaoUpdateDTO.getFuncionarioExecutorId() != null) {
-            TipoFuncionario funcionarioExecutor = funcionarioRepository.findById(administracaoUpdateDTO.getFuncionarioExecutorId())
-                    .orElseThrow(() -> new NoSuchElementException("Funcionário executor não encontrado com o ID: " + administracaoUpdateDTO.getFuncionarioExecutorId()));
+
+        modelMapper.map(dto, administracaoExistente);
+
+        if (dto.getFuncionarioExecutorId() != null) {
+            TipoFuncionario funcionarioExecutor = funcionarioRepository.findById(dto.getFuncionarioExecutorId())
+                    .orElseThrow(() -> new NoSuchElementException("Funcionário executor não encontrado com o ID: " + dto.getFuncionarioExecutorId()));
             administracaoExistente.setFuncionarioExecutor(funcionarioExecutor);
         }
-        
-        // Atualizar medicamento se fornecido (aguardando implementação da outra equipe)
-        // if (administracaoUpdateDTO.getMedicamentoId() != null) {
-        //     TipoMedicamento medicamento = medicamentoRepository.findById(administracaoUpdateDTO.getMedicamentoId())
-        //             .orElseThrow(() -> new NoSuchElementException("Medicamento não encontrado com o ID: " + administracaoUpdateDTO.getMedicamentoId()));
-        //     administracaoExistente.setMedicamento(medicamento);
-        // }
-        
+
+
+        if (dto.getMedicamentoId() != null) {
+            TipoMedicamento medicamento = medicamentoRepository.findById(dto.getMedicamentoId())
+                    .orElseThrow(() -> new NoSuchElementException("Medicamento não encontrado com o ID: " + dto.getMedicamentoId()));
+            administracaoExistente.setMedicamento(medicamento);
+        }
+
         TipoAdministracaoMedicamento administracaoAtualizada = administracaoMedicamentoRepository.save(administracaoExistente);
         return mapEntidadeParaResponse(administracaoAtualizada);
     }
@@ -142,24 +139,25 @@ public class AdministracaoMedicamentoServiceImplement implements AdminstracaoMed
                 .map(this::mapEntidadeParaResponse)
                 .collect(Collectors.toList());
     }
-    
+
     private AdministracaoMedicamentoResponseDTO mapEntidadeParaResponse(TipoAdministracaoMedicamento administracao) {
         AdministracaoMedicamentoResponseDTO dto = modelMapper.map(administracao, AdministracaoMedicamentoResponseDTO.class);
-        
-        if (administracao.getMedicamento() != null) {
+
+        if (administracao.getMedicamento() != null && administracao.getMedicamento().getProduto() != null) {
             dto.setMedicamentoId(administracao.getMedicamento().getId());
-            dto.setNomeMedicamento(administracao.getMedicamento().getNome());
+
+            dto.setNomeMedicamento(administracao.getMedicamento().getProduto().getNome());
         }
-        
+
         if (administracao.getEntradaProntuario() != null) {
             dto.setEntradaProntuarioId(administracao.getEntradaProntuario().getId());
         }
-        
+
         if (administracao.getFuncionarioExecutor() != null) {
             dto.setFuncionarioExecutorId(administracao.getFuncionarioExecutor().getId());
             dto.setNomeFuncionarioExecutor(administracao.getFuncionarioExecutor().getNome());
         }
-        
+
         return dto;
     }
 }
